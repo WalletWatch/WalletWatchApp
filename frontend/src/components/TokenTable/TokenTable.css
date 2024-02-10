@@ -1,0 +1,83 @@
+.aggrid {
+    width: 100%;
+    height: calc(100vh - 250px);
+}
+
+
+.ag-theme-quartz,
+.ag-theme-quartz-dark {
+    --ag-foreground-color: #343434;
+    --ag-background-color: #ffffff;
+
+    --ag-header-foreground-color: #808080;
+    --ag-header-background-color: #ffffff;   
+    
+    --ag-data-color: #636363;
+    
+    --ag-row-border-width: 1px;
+    --ag-row-border-color: #e0e0e0;
+
+    --ag-header-column-resize-handle-display: block;
+    --ag-header-column-resize-handle-height: 100%;
+    --ag-header-column-resize-handle-width: 0px;
+    --ag-header-column-resize-handle-color: #dddddd;
+
+    --ag-header-column-separator-display: block;
+    --ag-header-column-separator-height: 100%;
+    --ag-header-column-separator-width: 0px;
+    --ag-header-column-separator-color: #dddddd;
+}
+.ag-theme-quartz .ag-header-cell-label {
+    font-weight: 600;
+}
+.ag-header-cell-text {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.ag-theme-quartz .ag-cell-value {
+    font-weight: 600;
+}
+#ag-32 {
+    border: none;
+}
+.ag-root-wrapper.ag-layout-normal.ag-ltr {
+    border-radius: 10px;
+}
+.ag-header-cell-menu-button {
+    display: none;
+}
+
+.ag-theme-quartz .ag-header {
+    font-family: "Roboto Mono", monospace;
+}
+.ag-theme-quartz .ag-header-group-cell {
+    font-weight: normal;
+    font-size: 13px;
+}
+.ag-theme-quartz .ag-header-cell {
+    font-size: 13px;
+}
+.ag-header-cell-text {
+    margin-left: 0px;
+}
+.ag-header-cell.ag-column-last span {
+    margin-left: auto;
+    margin-right: 0px;
+}
+.celClass {
+    font-family: "Roboto Mono", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    font-style: normal;
+}
+.celClassCenter {
+    text-align: center;
+}
+.celClassLeft {
+    text-align: left;
+}
+
+/* .celClassRight {
+    text-align: right;
+} */

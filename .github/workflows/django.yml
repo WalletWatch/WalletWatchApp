@@ -1,0 +1,34 @@
+# name: Deploy
+
+# # Trigger the workflow on push and
+# # pull request events on the master branch
+# on:
+#   push:
+#     branches: ["master"]
+#   pull_request:
+#     branches: ["master"]
+
+# jobs:
+#   deploy:
+#     runs-on: self-hosted
+#     steps:
+#     - name: Update code
+#       run:
+#         cd /root/WalletWatchApp/frontend && git pull origin master;
+#     - name: Deploy Django to server
+#       run:
+#         source /root/WalletWatchApp/env/bin/activate;
+#         cd /root/WalletWatchApp && make deploy;
+#         deactivate
+#     - name: Deploy React to server
+#       run:
+#         cd /root/WalletWatchApp/client && npm install && npm run build;
+#         rm -r /var/www/3f9215732d0c.vps.myjino.ru;
+#         mkdir /var/www/3f9215732d0c.vps.myjino.ru;
+#         cp -r /root/WalletWatchApp/client/build/* /var/www/3f9215732d0c.vps.myjino.ru;
+#         sudo systemctl restart nginx;
+#     - name: Update tg bot
+#       run:
+#         sudo systemctl daemon-reload
+#         sudo systemctl restart telegram_bot
+#         sudo systemctl restart celery &

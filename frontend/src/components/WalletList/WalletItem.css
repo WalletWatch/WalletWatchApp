@@ -1,0 +1,93 @@
+.wallet_item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+
+    width: 100%;
+    z-index: 10;
+
+    cursor: default;
+    overflow: hidden;
+}
+
+.wallet_item:hover {
+    border-radius: 5px;
+    background-color: #eaecee;
+}
+
+
+.wallet_item_name {
+    margin: 5px;
+    margin-right: 15px;
+    font-family: "Roboto Mono", monospace;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+
+    white-space: nowrap;
+    min-width: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wallet_item_address {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 50px;
+
+    font-family: "Roboto Mono", monospace;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.copy_address {
+    position: relative;
+    margin-top: 0px;
+    margin-left: 5px;
+
+    cursor: pointer;
+}
+
+.copy_address svg {
+    fill: #90979f;
+}
+
+.copy_address svg:hover {
+    fill: black;
+}
+
+.wallet_item_copy {
+    display: none;
+    z-index: 100;
+}
+
+.copy_address:hover .wallet_item_copy {
+    position: absolute;
+    display: inline;
+    text-align: center;
+    z-index: 400;
+
+    bottom: 0px;
+    left: 14px;
+    width: 44px;
+    padding: 3px 0px;
+
+    background-color: #14283f;
+    color: #fff;
+    border-radius: 4px;
+
+    font-size: 10px;
+}
+
+.copy_address:hover .wallet_item_copy::before {
+    content: ''; 
+    position: absolute; 
+    transform: rotate(90deg);
+    left: -9px; bottom: 4px;
+    border: 5px solid transparent; 
+    border-top: 5px solid #14283f;
+
+}
