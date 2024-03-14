@@ -1,0 +1,16 @@
+[Unit]
+Description=Celery Service
+After=network.target
+
+[Service]
+Type=forking
+User=root
+Group=root
+WorkingDirectory=/root/wallet_watch_app/backend
+ExecStart=/root/wallet_watch_app/env/bin/celery -A project worker --loglevel=info --beat
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

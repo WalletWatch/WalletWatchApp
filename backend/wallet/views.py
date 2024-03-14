@@ -17,8 +17,11 @@ def balance_list(request):
         wallet_id = request.data['wallet_id']
         network_id = request.data['network_id']
 
-        if (not is_contract_exist(asset_address, network_id)):
-            return Response("Sush asset address doesn't exist", status=status.HTTP_404_NOT_FOUND, headers={'Access-Control-Allow-Origin':'*'})
+        try:
+            if (not is_contract_exist(asset_address, network_id)):
+                return Response("Sush asset address doesn't exist", status=status.HTTP_404_NOT_FOUND, headers={'Access-Control-Allow-Origin':'*'})
+        except: 
+            return Response(status=status.HTTP_404_NOT_FOUND, headers={'Access-Control-Allow-Origin':'*'})
 
         if Balance.objects.filter(asset_address=asset_address, wallet_id=wallet_id).count() != 0:
             return Response("Sush asset address exist", status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
@@ -30,14 +33,15 @@ def balance_list(request):
 
         try:
             network = Network.objects.get(pk=network_id)
-        except Wallet.DoesNotExist:
+        except Network.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND, headers={'Access-Control-Allow-Origin':'*'})
 
         asset_name = get_token_symbol(asset_address, network_id)
         balance = get_balance(wallet.wallet_address, asset_address, network_id)
         price = get_token_price(asset_name)
 
-        print(asset_name, balance, price)
+        if (balance is None or price is None or asset_name is None):
+            return Response(status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
 
         serializer = BalanceSerializer(data={
             "asset": asset_name,

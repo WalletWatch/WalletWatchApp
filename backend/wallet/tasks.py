@@ -18,9 +18,12 @@ def realtime_task():
         new_balance = get_balance(row.wallet_id.wallet_address, row.asset_address, row.network_id.id)
         new_price = get_token_price(row.asset)
 
+        print(new_balance, new_price)
+
         if (row.balance != new_balance or row.price != new_price):
             row.balance = new_balance
             row.price = new_price
+
             row.save()
 
             logger.info(row)

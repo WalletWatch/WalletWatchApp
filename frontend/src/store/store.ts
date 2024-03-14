@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux';
 
-import walletReducer from './walletReducer.ts';
-import tokenReducer from './tokenReducer.ts';
+import walletReducer from './wallet_reducer.ts';
+import tokenReducer from './token_reducer.ts';
 
 const rootReducer = combineReducers({
     wallet: walletReducer,
