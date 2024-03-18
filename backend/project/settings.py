@@ -3,6 +3,12 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+HOST_REDIS = os.environ.get("REDIS_HOST", "localhost")
+HOST_PG = os.environ.get("PSQL_HOST", "localhost")
+USER_PG = os.environ.get("PSQL_USER", "postgres")
+PW_PG = os.environ.get("PSQL_PASSWORD", "2608")
+DB_PG = os.environ.get("PSQL_NAME", "wallet2")
+
 SECRET_KEY = "django-insecure-g972hqw-n)m=oh5kkmc89hl_t342%^5ngp)7@9aq2*oa8u5_fl"
 
 DEBUG = True
@@ -29,21 +35,16 @@ ASGI_APPLICATION = "project.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+        "CONFIG": {
+            "hosts": [(os.environ.get("REDIS_HOST", "localhost"), 6379)],
+        },
     }
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = "redis://" + HOST_REDIS + ":6379"
+CELERY_RESULT_BACKEND = "redis://" + HOST_REDIS + ":6379"
 CELERY_IMPORTS = ("wallet.tasks",)
 
-# CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
-# CELERY_BEAT_SCHEDULE = {
-#     "realtime_task_schedule": {
-#         "task": "wallet.tasks.realtime_task",
-#         "schedule": 15,
-#     },
-# }
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -75,16 +76,14 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'project.wsgi.application'
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "wallet",
-        "USER": "postgres", #liza
-        "PASSWORD": "2608",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "NAME": DB_PG,
+        "USER": USER_PG,
+        "PASSWORD": PW_PG,
+        "HOST": HOST_PG,
+        "PORT": os.environ.get("PSQL_PORT", 5432),
     }
 }
 

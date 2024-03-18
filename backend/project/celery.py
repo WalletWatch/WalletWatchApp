@@ -9,15 +9,13 @@ app = Celery("project")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 
-
-@app.task(bind=True)
-def debug_task(self):
-    print(f"Request: {self.request!r}")
-
-
 app.conf.beat_schedule = {
-    "realtime_task_schedule": {
-        "task": "realtime_task",
-        "schedule": crontab(minute='*/15'),
+    "update_balance_schedule": {
+        "task": "update_balance",
+        "schedule": crontab(minute='*/20'),
+    },
+    "update_wallet_schedule": {
+        "task": "update_wallet",
+        "schedule": crontab(minute='*/2'),
     }
 }

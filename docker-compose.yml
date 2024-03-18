@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  psql:
+    image: postgres
+  redis:
+    image: redis:latest
+  celery:
+    build: ./backend
+    command: celery -A project worker --loglevel=info --beat
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - psql
+      - redis
+      - django
+    expose:
+      - "8001"
+    networks:
+      - web
+      - default
+  django:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/backend
+    command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
+    depends_on:
+      - psql 
+      - redis
+    networks:
+      - web
+      - default
+    expose:
+      - "8000"
+  react:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    networks:
+      - web
+    command: sh -c "npm start"
+    expose:
+      - "3000"
+
+networks:
+  web:
+    external: true
+  default:
+    internal: true

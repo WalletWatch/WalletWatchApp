@@ -73,19 +73,22 @@ describe('WalletForm Component', () => {
         });
     });
 
-    // test('calls createWallet and dispatches addWallet action when form is submitted with valid data', async () => {
-    //     const { getByText, getByPlaceholderText } = render(
-    //         <Provider store={store}>
-    //             <WalletForm />
-    //         </Provider>
-    //     );
-    //     fireEvent.click(getByText('Add wallet'));
-    //     fireEvent.change(getByPlaceholderText('Input name for wallet...'), { target: { value: 'Test Wallet' } });
-    //     fireEvent.change(getByPlaceholderText('Input wallet address...'), { target: { value: '0x1234567890abcdef' } });
-    //     fireEvent.click(getByText('Add new wallet'));
-    //     waitFor(() => {
-                // expect(createWallet).toHaveBeenCalled();
-    //         expect(addWallet).toHaveBeenCalled();
-    //     });
-    // });
+    test('calls createWallet and dispatches addWallet action when form is submitted with valid data', async () => {
+        const { getByText, getByPlaceholderText } = render(
+            <Provider store={store}>
+                <WalletForm />
+            </Provider>
+        );
+
+        createWallet.mockResolvedValue({data: { id: 1, wallet_name: 'Test Wallet', wallet_address: "0x0278184" }});
+
+        fireEvent.click(getByText('Add wallet'));
+        fireEvent.change(getByPlaceholderText('Input name for wallet...'), { target: { value: 'Test Wallet' } });
+        fireEvent.change(getByPlaceholderText('Input wallet address...'), { target: { value: '0x1234567890abcdef' } });
+        fireEvent.click(getByText('Add new wallet'));
+        waitFor(() => {
+            expect(createWallet).toHaveBeenCalled();
+            expect(addWallet).toHaveBeenCalled();
+        });
+    });
 });

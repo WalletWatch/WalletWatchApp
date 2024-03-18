@@ -5,7 +5,7 @@ import { RootState } from "../../store/store.ts";
 import WalletItem from "./wallet_item.tsx";
 
 function WalletList() {
-    const wallets = useSelector((state: RootState) => state.wallet)
+    const wallets = useSelector((state: RootState) => state.wallet);
 
     return (
         <div className="wallet">

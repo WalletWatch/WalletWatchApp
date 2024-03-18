@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  traefik_dev:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entryPoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=websecure"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=e.gryumova@gmail.com"
+      - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
+    networks:
+      - default
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
+networks:
+  web:
+    external: true

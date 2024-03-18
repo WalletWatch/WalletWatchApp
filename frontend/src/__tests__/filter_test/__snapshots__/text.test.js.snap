@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextFilter renders correctly 1`] = `
+<div>
+  <div
+    class="column-filter"
+  >
+    <div
+      style="overflow: hidden; height: 150px;"
+    >
+      <input
+        class="title"
+        id="searcherundefined"
+        placeholder="Search for undefined..."
+        type="text"
+        value=""
+      />
+      <div
+        class="column-filter-wrapper"
+        id="searchundefined"
+        style="height: calc(100% - 28px);"
+      >
+        <div
+          class="column-filter-item"
+        >
+          <input
+            checked=""
+            class="input-cols-filter"
+            data-testid="AllParams"
+            id="AllParamsundefined"
+            type="checkbox"
+            value="true"
+          />
+          <label
+            class="input-column-name"
+            for="AllParamsundefined"
+          >
+            (All)
+          </label>
+        </div>
+        <div
+          class="column-filter-item"
+        >
+          <input
+            checked=""
+            class="input-cols-filter"
+            type="checkbox"
+            value=""
+          />
+          <label
+            class="input-column-name"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="apply-button-wrapper"
+    >
+      <button
+        class="apply-button"
+        data-testid="Reset"
+      >
+        Reset
+      </button>
+      <button
+        class="apply-button"
+        data-testid="Apply"
+        style="margin-left: 5px;"
+      >
+        Apply
+      </button>
+    </div>
+  </div>
+</div>
+`;

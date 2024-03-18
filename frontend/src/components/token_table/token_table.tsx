@@ -3,39 +3,34 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css"; 
 import "ag-grid-community/styles/ag-theme-quartz.css"; 
 import 'ag-grid-enterprise';
+import {
+    ColDef,
+    GetRowIdParams,
+    ModuleRegistry
+  } from "@ag-grid-community/core";
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 import "./token_table.css";
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState, useMemo, useCallback } from "react";
 import CustomToolPanel from '../aggrid_filter/filters.js';
-import { ValueRenderer, BalanceFormatter, PriceFormatter} from './value_renderer.tsx';
-import { deleteBalance } from '../../http/balance_api.ts';
-import { removeToken } from '../../store/actions.ts';
+import { BalanceFormatter, PriceFormatter} from './value_renderer.tsx';
+import { updateBalance } from '../../http/balance_api.ts';
+import { addToken, updateWallet } from '../../store/actions.ts';
 import { updateToken } from '../../store/actions.ts';
 import { RootState } from '../../store/store.ts';
 import LastUpdate from './menu_item.jsx';
-
-
-type Token = {
-    id: number;
-    wallet_name: string;
-    asset: string;
-    asset_address: string;
-    network: string;
-    balance: number;
-    price: number;
-    updated: string;
-    createdAt: string;
-    wallet_id: number;
-}
+import { Token } from '../../types/index.ts';
 
 function TokenTable() {
     const dispatch = useDispatch();
-    const balance = useSelector((state: RootState) => state.token);
-    const [rowData, setRowData] = useState<Token[]>(balance);
+    const balance:Token[] = useSelector((state: RootState) => state.token);
+    
+    const getRowId = useCallback((params: GetRowIdParams) => params.data.id, []);
 
-    const columnDefs = [
+    const [columnDefs, setColumnDefs] = useState<ColDef[]>([
         { field: 'wallet_name', headerName: 'wallet', cellClass: ['celClass', 'celClassLeft']},
         { field: 'asset', headerName: 'asset', cellClass: ['celClass', 'celClassLeft'] },
         { field: 'network_name', headerName: 'network', cellClass: ['celClass', 'celClassLeft'] },
@@ -44,7 +39,8 @@ function TokenTable() {
         {
             field: 'value',
             headerName: "value",
-            cellRenderer: ValueRenderer,
+            filter: 'agNumberColumnFilter',
+            cellRenderer: PriceFormatter,
             cellClass: ['celClass', 'celClassLeft']
         },
         { 
@@ -54,28 +50,28 @@ function TokenTable() {
             headerClass: "ag-right-aligned-header",
             cellRenderer: LastUpdate
         }
-    ];
+    ]);
 
-    const sideBar = useMemo(() => {
-        return {
-            toolPanels: [
-                {
-                    id: 'customStats',
-                    labelDefault: 'Table Filters',
-                    labelKey: 'customStats',
-                    iconKey: 'custom-stats',
-                    toolPanel: CustomToolPanel,
-                    toolPanelParams: {
-                        len: rowData.length
-                    }
-                }
-            ]
-        }
-    } , [rowData])
+    // const sideBar = useMemo(() => {
+    //     return {
+    //         toolPanels: [
+    //             {
+    //                 id: 'customStats',
+    //                 labelDefault: 'Table Filters',
+    //                 labelKey: 'customStats',
+    //                 iconKey: 'custom-stats',
+    //                 toolPanel: CustomToolPanel,
+    //                 toolPanelParams: {
+    //                     len: balance.length
+    //                 }
+    //             }
+    //         ]
+    //     }
+    // } , [balance])
 
-    const defaultColDef = useMemo(() => {
+    const defaultColDef = useMemo<ColDef>(() => {
         return {
-          editable: true,
+          editable: false,
           enableRowGroup: true,
           enablePivot: true,
           enableValue: true,
@@ -84,55 +80,75 @@ function TokenTable() {
           filter: true,
           flex: 1,
           minWidth: 40,
-        };
+        }
     }, []);
 
     useEffect(() => {
-        
-        const chatSocket =  new WebSocket('ws://3f9215732d0c.vps.myjino.ru/ws/wallet/');
-
+        const chatSocket =  new WebSocket(`wss://gryumova.ru/ws/wallet/`);
+    
         chatSocket.onmessage = function(e:any) {
             const data = JSON.parse(e.data);
-
-            dispatch(updateToken(data.balance));
+            
+            if (data.balance) {
+                if (data.update === true)
+                    dispatch(updateToken(data.balance));
+                else dispatch(addToken(data.balance));
+            }
+            if (data.wallet) {
+                dispatch(updateWallet(data.wallet));
+            }
         }
     }, [])
 
-    useEffect(() => {
-        setRowData(balance);
-    }, [balance]);
-
-    const onCellValueChanged = useCallback((params) => {
-        params.api.refreshClientSideRowModel();
-    }, []);
+    // useEffect(() => {
+    //     setRowData(balance);
+    // }, [balance]);
 
     const getContextMenuItems = useCallback((params) => {
         return [
           ...(params.defaultItems || []),
           'separator',
           {
-            name: 'Delete row',
-            action: () => handleClick(params.node.data)
+            name: params.node.data.track? 'Untrack': "Track",
+            action: () => trackClick(params.node.data)
           },
+          {
+            name: 'Change Delta',
+            action: () => changeDelta(params.node.data)
+          }
         ];
-      }, []);
+    }, []);
 
-    const handleClick = (data) => {
-        deleteBalance(data.id);
-        dispatch(removeToken(data.id));
+    const trackClick = (data) => {
+        let new_data = {...data, track: !data.track};
+
+        dispatch(updateToken(new_data));
+        updateBalance(new_data);
+    }
+
+    const changeDelta = (data) => {
+        const value = prompt("Enter new delta value:") || "";
+        const delta = parseFloat(value);
+        if (!isNaN(delta)) {
+            let new_data = {...data, track: !data.track};
+            dispatch(updateToken(new_data));
+            updateBalance(new_data);
+        } else {
+            alert("Input correct value!")
+        }
     }
 
     return (
         <div className="ag-theme-quartz aggrid">
             <AgGridReact 
-                rowData={rowData} 
+                rowData={balance} 
                 columnDefs={columnDefs} 
+
                 getContextMenuItems={getContextMenuItems}
                 defaultColDef={defaultColDef}
-                sideBar={sideBar}
+                getRowId={getRowId}
+                // sideBar={sideBar}
                 suppressMenuHide
-                reactiveCustomComponents
-                onCellValueChanged={onCellValueChanged}
             />
         </div>
     );

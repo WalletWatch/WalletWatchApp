@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  psql:
+    container_name: dev_psql
+    environment:
+      - POSTGRES_DB=wallet_dev
+      - POSTGRES_USER=liza
+      - POSTGRES_PASSWORD=2608
+  redis:
+    container_name: dev_redis
+  django:
+    container_name: dev_django
+    environment:
+      - REDIS_HOST=dev_redis
+      - PSQL_NAME=wallet_dev
+      - PSQL_USER=liza
+      - PSQL_PASSWORD=2608
+      - PSQL_HOST=dev_psql
+      - PSQL_PORT=5432
+  celery: 
+    environment:
+      - REDIS_HOST=dev_redis
+      - PSQL_NAME=wallet
+      - PSQL_USER=liza
+      - PSQL_PASSWORD=2608
+      - PSQL_HOST=dev_psql
+      - PSQL_PORT=5432
+    depends_on:
+      - psql
+      - django
+  react:
+    environment:
+      - REACT_APP_API_URL=https://localhost:8000

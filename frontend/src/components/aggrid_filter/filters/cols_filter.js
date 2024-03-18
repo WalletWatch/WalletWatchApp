@@ -158,6 +158,7 @@ const ColsFilter = (props) => {
                     <div className='column-filter-item'>
                         <input 
                             id='AllCols' 
+                            data-testid="AllCols"
                             className='input-cols-filter' 
                             type='checkbox' 
 
@@ -194,6 +195,7 @@ const ColsFilter = (props) => {
             <div className='apply-button-wrapper'>
                 <button
                     className='apply-button' 
+                    data-testid="reset"
 
                     onClick={clickResetRow}
                 >   
@@ -201,6 +203,7 @@ const ColsFilter = (props) => {
                 </button>
                 <button 
                     className='apply-button' 
+                    data-testid="apply"
                     style={{marginLeft: "5px"}}
 
                     onClick={clickHandleFilter}

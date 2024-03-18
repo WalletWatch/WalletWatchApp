@@ -10,13 +10,13 @@ describe('LastUpdate component', () => {
   });
 
   it('updates time correctly', () => {
-    jest.useFakeTimers(); // Используем фейковые таймеры
+    jest.useFakeTimers(); 
     const { getByText } = render(<LastUpdate value={new Date()} />);
     act(() => {
-      jest.advanceTimersByTime(5 * 60 * 1000); // Перемотка времени вперед на 5 минут
+      jest.advanceTimersByTime(5 * 60 * 1000);
     });
     expect(getByText('5 minutes ago')).toBeInTheDocument();
-    jest.useRealTimers(); // Возвращаем реальные таймеры
+    jest.useRealTimers();
   });
 
   it('clears interval on unmount', () => {

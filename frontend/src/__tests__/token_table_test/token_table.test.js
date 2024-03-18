@@ -34,17 +34,6 @@ describe('TokenTable component', () => {
         expect(getByText('last_update')).toBeInTheDocument();
     });
 
-    // it('handles row deletion correctly', () => {
-    //     const deleteBalanceMock = jest.fn();
-    //     const { getByText } = render(
-    //         <Provider store={store}>
-    //             <TokenTable />
-    //         </Provider>
-    //     );
-    //     fireEvent.click(getByText('Delete row'));
-    //     expect(deleteBalanceMock).toHaveBeenCalled();
-    // });
-
     // it('updates table data correctly', () => {
     //     const mockWebSocket = jest.fn();
     //     const mockDispatch = jest.fn();
@@ -54,7 +43,23 @@ describe('TokenTable component', () => {
     //         </Provider>
     //     );
 
-    //     fireEvent(mockWebSocket.onmessage, { data: JSON.stringify({ balance: /* mock balance data */ }) });
+    //     fireEvent(mockWebSocket.onmessage, { 
+    //         data: JSON.stringify({ 
+    //             balance: { 
+    //                 id: 1, 
+    //                 asset: 'ETH', 
+    //                 asset_address: '0x23d241g',
+    //                 wallet_name: 'wallet',
+    //                 network_name: 'ERC20',
+    //                 balance: 0,
+    //                 price: 0,
+    //                 updated: "27.03.2024",
+    //                 createdAt: "27.03.2024",
+    //                 wallet_id: 1,
+    //                 network: 1
+    //             }
+    //         }) 
+    //     });
     //     expect(mockDispatch).toHaveBeenCalled();
     // });
 });

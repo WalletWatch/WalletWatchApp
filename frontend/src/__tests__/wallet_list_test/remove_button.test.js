@@ -26,6 +26,7 @@ describe('RemoveWallet component', () => {
         id: 1,
         wallet_name: 'Test Wallet',
         wallet_address: 'test_address',
+        wallet_sum: 0
       };
     });
 

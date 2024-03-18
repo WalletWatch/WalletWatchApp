@@ -10,8 +10,8 @@ describe('WalletList Component', () => {
     it('should render title correctly', () => {
         const store = mockStore({
         wallet: [
-                { id: 1, wallet_name: 'Test Wallet 1', wallet_address: '0x1234567890abcdef' },
-                { id: 2, wallet_name: 'Test Wallet 2', wallet_address: '0xabcdef1234567890' },
+                { id: 1, wallet_name: 'Test Wallet 1', wallet_address: '0x1234567890abcdef', wallet_sum: 0 },
+                { id: 2, wallet_name: 'Test Wallet 2', wallet_address: '0xabcdef1234567890', wallet_sum: 0 },
             ],
         });
         const { getByText } = render(
@@ -25,8 +25,8 @@ describe('WalletList Component', () => {
     it('should render wallet items correctly', () => {
         const store = mockStore({
         wallet: [
-            { id: 1, wallet_name: 'Test Wallet 1', wallet_address: '0x1234567890abcdef' },
-            { id: 2, wallet_name: 'Test Wallet 2', wallet_address: '0xabcdef1234567890' },
+            { id: 1, wallet_name: 'Test Wallet 1', wallet_address: '0x1234567890abcdef', wallet_sum: 0 },
+            { id: 2, wallet_name: 'Test Wallet 2', wallet_address: '0xabcdef1234567890', wallet_sum: 0 },
         ],
         });
         const { getByText } = render(

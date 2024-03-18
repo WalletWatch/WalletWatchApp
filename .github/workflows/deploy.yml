@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      # - main
+      # - develop
+      - traefik
+      - v2
+
+jobs:
+  prepare-environment:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Stop and remove containers, networks prod
+        if: github.ref == 'refs/heads/v2'
+        run: |
+          docker-compose -p prod -f docker-compose.yml -f docker-compose.prod.yml down
+      - name: Stop and remove containers, networks
+        if: github.ref == 'refs/heads/v2'
+        run: |
+          docker-compose -p dev -f docker-compose.yml -f docker-compose.override.yml down
+
+  deploy:
+    runs-on: self-hosted
+    needs: prepare-environment
+    steps:
+    
+    - name: Deploy to production
+      if: github.ref == 'refs/heads/v2'
+      run: |
+        docker-compose -p prod -f docker-compose.yml -f docker-compose.prod.yml build
+        docker-compose -p prod -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+    - name: Deploy to development
+      if: github.ref == 'refs/heads/traefik'
+      run: |
+        docker-compose -p dev -f docker-compose.yml -f docker-compose.override.yml build
+        docker-compose -p dev -f docker-compose.yml -f docker-compose.override.yml up -d

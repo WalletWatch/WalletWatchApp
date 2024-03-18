@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  psql:
+    container_name: prod_psql
+    environment:
+      - POSTGRES_DB=wallet
+      - POSTGRES_USER=liza
+      - POSTGRES_PASSWORD=2608
+  redis:
+    container_name: prod_redis
+  django:
+    container_name: prod_django
+    environment:
+      - REDIS_HOST=prod_redis
+      - PSQL_NAME=wallet
+      - PSQL_USER=liza
+      - PSQL_PASSWORD=2608
+      - PSQL_HOST=prod_psql
+      - PSQL_PORT=5432
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django-prod.rule=Host(`gryumova.ru`) && (PathPrefix(`/api`) || PathPrefix(`/ws`))"
+      - "traefik.http.routers.django-prod.priority=75"
+      - "traefik.http.services.django-prod.loadbalancer.server.port=8000"
+      - "traefik.docker.network=web"
+  celery: 
+    environment:
+      - REDIS_HOST=prod_redis
+      - PSQL_NAME=wallet
+      - PSQL_USER=liza
+      - PSQL_PASSWORD=2608
+      - PSQL_HOST=prod_psql
+      - PSQL_PORT=5432
+    depends_on:
+      - psql
+      - django
+  react:
+    environment:
+      - REACT_APP_API_URL=https://gryumova.ru
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react-prod.rule=Host(`gryumova.ru`)"
+      - "traefik.http.routers.react-prod.priority=25"
+      - "traefik.http.services.react-prod.loadbalancer.server.port=3000"
+      - "traefik.http.services.react-prod.loadBalancer.sticky=true" 
+      - "traefik.docker.network=web"

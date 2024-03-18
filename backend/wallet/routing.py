@@ -1,6 +1,8 @@
 from django.urls import path
+from channels.routing import URLRouter
 from . import consumers
 
-websocket_urlpatterns = [
+websocket_urlpatterns = URLRouter([
     path('ws/wallet/', consumers.WalletConsumer.as_asgi()),
-]
+    path('ws/alert/', consumers.AlertConsumer.as_asgi()),
+])

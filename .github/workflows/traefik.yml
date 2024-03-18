@@ -1,0 +1,19 @@
+name: Traefik
+
+on:
+  push:
+    branches:
+      - main
+      # - docker
+      # - traefik
+
+jobs:
+  traefik:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run traefik 
+        run: |
+          docker network create --driver=bridge --attachable --internal=false web
+          cd traefik && docker-compose -f docker-compose.yml up -d

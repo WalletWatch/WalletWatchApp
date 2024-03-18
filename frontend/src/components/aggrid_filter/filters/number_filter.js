@@ -199,9 +199,11 @@ const NumberFilter = (props) => {
                     <input 
                         className='input-numeric-slider'
                         id={`range1-${node}`}
+                        data-testid="range-1"
+
                         value={inputMin}
                         onChange={event => setInputMin(event.target.value)}
-                        onKeyPress={event => inputNumeric(event, "one")}
+                        onKeyDown={event => inputNumeric(event, "one")}
                         type ='text'
                     >
                     </input>
@@ -209,9 +211,11 @@ const NumberFilter = (props) => {
                         className='input-numeric-slider'
                         style={{textAlign: "end"}}
                         id={`range2-${node}`}
+                        data-testid="range-2"
+
                         value={inputMax}
                         onChange={event => setInputMax(event.target.value)}
-                        onKeyPress={event => inputNumeric(event, "two")}
+                        onKeyDown={event => inputNumeric(event, "two")}
                         type ='text'
                     >
                     </input>
@@ -219,11 +223,13 @@ const NumberFilter = (props) => {
                 <div className={`container container-${node}`}>
                     <div 
                         className={`slider-track slider-track-${node}`}
+                        data-testid="slider-track"
                         style={{background: "#666666"}}
                         onMouseDown={event => clickTrack(event)}
                     ></div>
                     <input 
                         id={`slider-1-${node}`}
+                        data-testid="slider-1"
                         className='input-slider1'
                         type='range' 
 
@@ -237,6 +243,7 @@ const NumberFilter = (props) => {
                     />
                     <input 
                         id={`slider-2-${node}`}
+                        data-testid="slider-2"
                         className='input-slider2'
                         type='range' 
 

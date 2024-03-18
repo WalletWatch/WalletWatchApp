@@ -28,19 +28,11 @@
     <img src="/assets/wallet-4.gif" width="600">
 </div>
 
-- Ability to input ERC20, BEP20 wallet addresses. This simplifies the process of tracking balances on various wallets.
-- Ability to select tokens to track balance. Users can select tokens they want to track, giving more control over their cryptocurrency assets.
-- Display of balances in table form. This provides a clear and easily understandable view of the state of your cryptocurrency assets.
+- **Streamlined Wallet Tracking:** Input your ERC20 and BEP20 wallet addresses for seamless monitoring of multiple wallets in one place.
+- **Token Selection:** Choose specific tokens to track, providing granular control over your crypto portfolio.
+- **Balance Display:** Display of balances in table form. This provides a clear and easily understandable view of the state of your cryptocurrency assets.
 
 ## Requirements
-
-<!-- <div align="center">
-  <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original-wordmark.svg" title="Python" alt="Python" width="80" height="80"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/nodejs/nodejs-original-wordmark.svg" title="Node.js" alt="Node.js" width="80" height="80"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/postgresql/postgresql-original-wordmark.svg" title="Postgresql" alt="Postgresql" width="80" height="80"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/redis/redis-original-wordmark.svg" title="Redis" alt="Redis" width="80" height="80"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/redux/redux-original.svg" title="Redis" alt="Redis" width="80" height="80"/>&nbsp;
-</div> -->
 
 - Python 3.6 and above
 - Node.js
@@ -54,37 +46,25 @@
 
 ```bash
 git clone https://github.com/WalletWatch/wallet_watch_app.git
-cd WalletWatchApp
+cd wallet_watch_app
 
 python3 -m venv env
 source env/bin/activate
 ```
 
-2. Install Python dependencies:
+2. Run Python Django server with Redis and Celery:
 
 ```bash
-make prepare-python
+make run-server
 ```
 
-3. Install Node.js dependencies:
+3. Start the React app:
 
-```bash
-make prepare-npm
-```
-
-4. Start the application:
-
-To start the server, use:
-```bash
-make run
-```
-
-To start the client application:
 ```bash
 make run-client
 ```
 
-5. Go to [http://localhost:8000](http://localhost:8000/) in your web browser. (Check the port that your React application is running on)
+4. Go to [http://localhost:8000](http://localhost:8000/) in your web browser. (Check the port that your React application is running on)
 
 ## Usage
 
@@ -102,77 +82,20 @@ app.conf.beat_schedule = {
 
 ## Deploy the app
 
-1. **Configure Paths**: Within the `/infra/conf` directory, ensure to update the absolute paths to the working directory and virtual environments in all relevant files.
-
-2. Copy `.env.sample` to a new file called `.env` and configure the settings as described in the Environment variables section.
-
-| App Setting | Value | Note |
-| --- | --- | ------------- |
-|VENV_NAME|env|Name of the virtual environment|
-|PROJECT_DIR||Directory of the project|
-|HOST||Hostname or IP address|
-|NGINX_CONFIG|nginx.conf|Path to Nginx configuration file|
-|CELERY_SERVICE|celery.service|Name of the Celery service|
-|DAPHNE_SERVICE|daphne.conf|Configuration file for Daphne service|
-|POSTGRES_DB|wallet|Name of the PostgreSQL database|
-|POSTGRES_USER||PostgreSQL username|
-|POSTGRES_PASSWORD||PostgreSQL password|
-
-### Installation
-
-Clone this repository onto your remote server and execute the following commands:
-
-1. Clone Project Repository in server
-
-Clone your project repository and and go to the infra folder:
+1. **Docker Setup:**<br/>
+  Install Docker and Docker Compose on your server.
+2. **Configuration:**<br/>
+  Configure settings as per your environment.
+3. **Domain Setup:**<br/>
+  Configure your domain and A records to point to your server's IP address and open port 443 for external connection.
+4. **Launch Docker Containers:**<br/>
+  Launch the docker containers using the following commands:
 
 ```bash
-git clone https://github.com/WalletWatch/wallet_watch_app.git
-cd infra
+docker-compose -p prod -f docker-compose.prod.yml down
+docker-compose -p prod -f docker-compose.prod.yml up -d
 ```
 
-2. Install Dependencies
-
-Install necessary packages and applications:
-
-```bash
-make configure_server
-```
-
-3. PostgreSQL Configuration
-
-Configure the PostgreSQL database with the credentials specified in the Makefile. Make changes if required:
-
-```bash
-make postgresql 
-```
-
-4. Nginx Setup
-
-Start the Nginx server:
-
-```bash
-make migrate 
-make nginx-conf
-```
-
-5. Build react app:
-
-```bash
-make react
-```
-
-6. Daphne, Redis, and Celery Configuration
-
-Configure Daphne, Redis, and Celery for ASGI support and background tasks:
-
-```bash
-make daphne-conf 
-make redis
-make celery-conf
-```
-
-7. You can see running app at `http://{host}/app`.
 
 ## Contributing to the project
 

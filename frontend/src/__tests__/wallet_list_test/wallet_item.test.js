@@ -24,6 +24,7 @@ describe('WalletItem Component', () => {
           id: 1,
           wallet_name: 'Test Wallet',
           wallet_address: '0x1234567890abcdef',
+          wallet_sum: 0
         };
     });
 

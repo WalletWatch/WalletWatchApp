@@ -1,21 +1,4 @@
-type Token = {
-    id: number;
-    wallet_name: string;
-    asset: string;
-    asset_address: string;
-    network: string;
-    balance: number;
-    price: number;
-    updated: string;
-    createdAt: string;
-    wallet_id: number;
-}
-
-type Wallet = {
-    id: number;
-    wallet_name: string;
-    wallet_address: string;
-}
+import { Wallet, Token, Alert } from "../types";
 
 function addWallet(wallet: Wallet) {
     return {
@@ -29,6 +12,20 @@ function removeWallet(id: number) {
       type: 'REMOVE_WALLET',
       payload: id,
     };
+}
+
+function updateWallet(wallet: Wallet) {
+  return {
+    type: 'UPDATE_WALLET',
+    payload: wallet
+  }
+}
+
+function updateAllWallet(wallets: Wallet[]) {
+  return {
+    type: 'UPDATE_ALL_WALLET',
+    payload: wallets
+  }
 }
 
 function addToken(token: Token) {
@@ -59,4 +56,22 @@ function removeToken(id: number) {
     };
 }
 
-export { addWallet, addToken, removeToken, removeWallet, updateAllToken, updateToken };
+function addAlert(alert: Alert) {
+  return {
+    type: 'ADD_ALERT',
+    payload: alert
+  }
+}
+
+function updateAlert(alerts: Alert[]) {
+  return {
+    type: 'UPDATE_ALL_ALERT',
+    payload: alerts
+  }
+}
+
+export { 
+  addToken, removeToken, removeWallet, updateAllToken, updateToken, 
+  addWallet, updateWallet, updateAllWallet,
+  addAlert, updateAlert 
+};

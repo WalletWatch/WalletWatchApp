@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wallet', '0003_balance_price_alter_balance_balance'),
+        ('wallet', '0001_initial'),
     ]
 
     operations = [
@@ -16,7 +16,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('network', models.CharField(max_length=20)),
                 ('network_url', models.CharField(max_length=256)),
-                ('network_ABI', models.TextField()),
+                ('network_abi', models.TextField(default='')),
+                ('network_chain', models.TextField(default=0))
             ],
         ),
     ]

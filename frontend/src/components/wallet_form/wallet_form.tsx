@@ -63,6 +63,8 @@ function WalletForm() {
 
     const handleClickButton = (e:any) => {
         e.preventDefault();
+
+        if (submitting) return;
         setErrors(validateWallet(wallet));
 
         setSubmitting(true);
@@ -74,20 +76,20 @@ function WalletForm() {
         newWalet.append('wallet_address', wallet.address);
 
         createWallet(newWalet)
-        .then(data => dispatch(addWallet(data)))
-        .then(() => setShow(false))
-        .catch((errors) => {
-            errors.response.data.wallet_address ? setErrors({
-                address: errors.response.data.wallet_address[0]
-            }): errors.response.data.wallet_name ? setErrors({
-                name: errors.response.data.wallet_name[0]
-            }): setErrors({
-                address: errors.response.data
-            })
+        .then(data => { dispatch(addWallet(data)) })
+        .then(() => {
+                setShow(false);
+                setWallet({name:"", address:""});
+                setSubmitting(false);
+        })
+        .catch((err) => {
+            if (err.response) {
+                setErrors({address: err.response.data});
+            } else {
+                console.log("An error occurred:", err.message);
+            }
+            setSubmitting(false);
         });
-
-        setWallet({name:"", address:""});
-        setSubmitting(false);
     }
 
     const clickShowButton = () => {
@@ -147,6 +149,7 @@ function WalletForm() {
                 ) : null}
                 <button 
                     className="wallet_button"
+                    style={{cursor: submitting?"not-allowed":"pointer"}}
                     onClick={handleClickButton}
                 >
                     Add new wallet

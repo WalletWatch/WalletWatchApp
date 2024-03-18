@@ -1,15 +1,9 @@
 import React from 'react';
-import * as copy from 'copy-to-clipboard';
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import RemoveWallet from "./remove_wallet.tsx";
 import "./wallet_item.css"
-
-type Wallet = {
-    id: number;
-    wallet_name: string;
-    wallet_address: string;
-}
+import { Wallet } from '../../types/index.ts';
 
 type WalletItemProps = {
     indx: number;
@@ -24,9 +18,24 @@ function WalletItem({indx, wallet}: WalletItemProps) {
         setTimeout(() => setIsCopy(false), 2000); // Reset status after 2 seconds
     };
 
+    const formatter = (value) => {
+        let settings = {} 
+    
+        settings["useGrouping"] = true;
+        settings["minimumFractionDigits"] = 0;
+        settings["maximumFractionDigits"] = 3;
+    
+        settings["style"] = "currency";
+        settings["currencyDisplay"] = "narrowSymbol";
+        settings["currency"] = "USD";
+        
+        let formatter = new Intl.NumberFormat("en-GB", settings);
+        return  formatter.format(value);
+    }
+
     return (
         <div 
-            className="wallet_item"
+            className="wallet_item_wrapper"
             data-testid="wallet_item"
         >
             <div className="wallet_item">
@@ -48,6 +57,7 @@ function WalletItem({indx, wallet}: WalletItemProps) {
                         </div>
                     </CopyToClipboard>
                 </div>
+                <span className='wallet_item_name wallet_item_price'>{formatter(wallet.wallet_sum)}</span>
             </div>
             <RemoveWallet data={wallet}/>
         </div>
