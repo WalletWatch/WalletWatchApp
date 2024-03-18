@@ -33,6 +33,8 @@ services:
     depends_on:
       - psql
       - redis
+    ports:
+    - "8000:8000"
   app:
     container_name: react_app_dev
     restart: on-failure
