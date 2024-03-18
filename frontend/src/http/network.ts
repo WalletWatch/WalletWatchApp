@@ -1,7 +1,8 @@
 import axios from "axios";
 
-let host = '3f9215732d0c.vps.myjino.ru'
+// let host = '3f9215732d0c.vps.myjino.ru'
 // let host = '127.0.0.1:8000'
+let host = process.env.REACT_APP_API_URL;
 
 export const fetchNetwork = async () => {
     const {data} = await axios.get(`http://${host}/api/network/`)

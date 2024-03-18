@@ -89,7 +89,7 @@ function TokenTable() {
 
     useEffect(() => {
         
-        const chatSocket =  new WebSocket('ws://3f9215732d0c.vps.myjino.ru/ws/wallet/');
+        const chatSocket =  new WebSocket(`ws://${process.env.REACT_APP_API_URL}/ws/wallet/`);
 
         chatSocket.onmessage = function(e:any) {
             const data = JSON.parse(e.data);

@@ -1,0 +1,68 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=${PSQL_NAME}
+      - POSTGRES_USER=${PSQL_USER}
+      - POSTGRES_PASSWORD=${PSQL_PASSWORD}
+  redis:
+    image: redis:latest
+  api-dev:
+    build: ./backend
+    env_file: .env.dev
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.walletwatch-api.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)"
+      - "traefik.http.services.walletwatch-api.loadbalancer.server.port=8000"
+      - "traefik.http.routers.walletwatch-api.tls=true"
+  celery:
+    build: ./backend
+    command: celery -A project worker --loglevel=info --beat
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - db
+      - redis
+  traefik:
+    image: traefik:v2.4
+    command: --providers.docker
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./letsencrypt:/letsencrypt
+  app:
+    container_name: react_app_dev
+    restart: on-failure
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend/src:/frontend/src
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.walletwatch.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/app/`)"
+      - "traefik.http.routers.walletwatch.entrypoints=web-secure"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "npm start"
+    env_file:
+      - .env.dev
+volumes:
+  letsencrypt:
+networks:
+  registry_default:
+    external: true
+
+
+# docker-compose up --scale celery=3

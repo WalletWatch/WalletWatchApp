@@ -11,7 +11,7 @@ bitarray==2.9.2
 celery==5.3.6
 certifi==2024.2.2
 cffi==1.16.0
-channels==4.0.0
+channels
 channels_redis
 charset-normalizer==3.3.2
 click==8.1.7
@@ -22,13 +22,13 @@ constantly==23.10.4
 cron-descriptor==1.4.3
 cryptography==42.0.5
 cytoolz==0.12.3
-daphne==4.1.0
-Django
+daphne
+django
+djangorestframework
 django-celery-beat==2.6.0
-django-cors-headers==4.3.1
-django-extensions==3.2.3
+django-cors-headers
+django-extensions
 django-timezone-field==6.1.0
-djangorestframework==3.14.0
 eth-account==0.11.0
 eth-hash==0.7.0
 eth-keyfile==0.8.0
@@ -50,7 +50,7 @@ multidict==6.0.5
 parsimonious==0.9.0
 prompt-toolkit==3.0.43
 protobuf==4.25.3
-psycopg2-binary==2.9.9
+psycopg2-binary
 pyasn1==0.5.1
 pyasn1-modules==0.3.0
 pycparser==2.21

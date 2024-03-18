@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from os import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -77,14 +78,25 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = 'project.wsgi.application'
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "wallet",
+#         "USER": "postgres", #liza
+#         "PASSWORD": "2608",
+#         "HOST": "127.0.0.1",
+#         "PORT": "5432",
+#     }
+# }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "wallet",
-        "USER": "postgres", #liza
-        "PASSWORD": "2608",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "NAME": environ.get("PSQL_NAME"),
+        "USER": environ.get("PSQL_USER"),
+        "PASSWORD": environ.get("PSQL_PASSWORD"),
+        "HOST": environ.get("PSQL_HOST"),
+        "PORT": environ.get("PSQL_PORT"),
     }
 }
 

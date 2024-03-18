@@ -1,29 +1,90 @@
-# name: Deploy
+name: Deploy
 
-# # Trigger the workflow on push and
-# # pull request events on the master branch
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - docker
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and push Docker images
+      run: |
+        docker-compose --env-file .env.prod -f docker-compose.prod.yml build
+        docker-compose --env-file .env.prod -f docker-compose.prod.yml push
+        docker-compose --env-file .env.dev -f docker-compose.dev.yml build
+        docker-compose --env-file .env.dev -f docker-compose.dev.yml push
+
+    - name: Deploy to production
+      if: github.ref == 'refs/heads/main'
+      run: docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
+
+    - name: Deploy to development
+      if: github.ref == 'refs/heads/docker'
+      run: docker-compose --env-file .env.dev -f docker-compose.dev.yml up -d
+
+
+# name: Django CI
+
 # on:
 #   push:
-#     branches: ["master"]
+#     branches: [ main ]
 #   pull_request:
-#     branches: ["master"]
+#     branches: [ main ]
 
 # jobs:
-#   deploy:
-#     runs-on: self-hosted
+#   test:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       max-parallel: 4
+#       matrix:
+#         python-version: [3.9]
+#     services:
+#       postgres:
+#         image: postgres:12
+#         env:
+#           POSTGRES_USER: core
+#           POSTGRES_PASSWORD: 12345678
+#           POSTGRES_DB: coredb
+#         ports:
+#           - 5432:5432
+#         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
 #     steps:
-#     - name: Update code
-#       run:
-#         cd /root/wallet_watch_app/frontend && git pull origin master;
-#     - name: Deploy Django to server
-#       run:
-#         source /root/wallet_watch_app/env/bin/activate;
-#         cd /root/wallet_watch_app && make deploy;
-#         deactivate
-#     - name: Deploy React to server
-#       run:
-#         cd /root/wallet_watch_app/client && npm install && npm run build;
-#         rm -r /var/www/3f9215732d0c.vps.myjino.ru;
-#         mkdir /var/www/3f9215732d0c.vps.myjino.ru;
-#         cp -r /root/wallet_watch_app/client/build/* /var/www/3f9215732d0c.vps.myjino.ru;
-#         sudo systemctl restart nginx;
+#     - uses: actions/checkout@v2
+#     - name: Set up Python ${{ matrix.python-version }}
+#       uses: actions/setup-python@v2
+#       with:
+#         python-version: ${{ matrix.python-version }}
+#     - name: psycopg2 prerequisites
+#       run: sudo apt-get install python-dev libpq-dev
+#     - name: Install Dependencies
+#       run: |
+#         python -m pip install --upgrade pip
+#         pip install -r requirements.txt
+#     - name: Run Tests
+#       run: |
+#         python manage.py test
+
+#   deploy:
+#     name: Deploying
+#     needs: [test]
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Deploying Application
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: ${{ secrets.SSH_AWS_SERVER_IP }}
+#         username: ${{ secrets.SSH_SERVER_USER }}
+#         key: ${{ secrets.SSH_PRIVATE_KEY }}
+#         passphrase: ${{ secrets.SSH_PASSPHRASE }}
+#         script: |
+#           cd ~/.scripts
+#           ./docker-deploy.sh
