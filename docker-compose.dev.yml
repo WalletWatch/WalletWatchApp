@@ -20,9 +20,10 @@ services:
       - psql
     expose:  # new
       - 8000
-    labels:
+     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`271b83d7f474.vps.myjino.ru`)"
+      - "traefik.http.routers.api-dev.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)"
+      - "traefik.http.services.api-dev.loadbalancer.server.port=8000"
   celery:
     container_name: celery_dev
     build: ./backend
@@ -40,8 +41,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./frontend/src:/frontend/src
-    expose:  # new
+    expose:
       - 3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react-app.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/app/`)"
+      - "traefik.http.services.react-app.loadbalancer.server.port=3000"
     command: >
       sh -c "npm start"
     env_file:
