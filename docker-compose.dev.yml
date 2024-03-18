@@ -30,7 +30,7 @@ services:
     volumes:
       - ./backend:/backend
     depends_on:
-      - db
+      - psql
       - redis
   traefik:
     container_name: traefik_dev
