@@ -1,10 +1,8 @@
 version: '3'
 services:
-  db:
+  psql:
     container_name: db_dev
     image: postgres
-    ports:
-      - "5433:5432"
     environment:
       - POSTGRES_DB=${PSQL_NAME}
       - POSTGRES_USER=${PSQL_USER}
@@ -19,7 +17,7 @@ services:
     volumes:
       - ./backend:/backend
     depends_on:
-      - db
+      - psql
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.walletwatch-api.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)"
