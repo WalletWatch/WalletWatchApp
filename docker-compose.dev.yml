@@ -4,7 +4,7 @@ services:
     container_name: db_dev
     image: postgres
     ports:
-    - "127.0.0.1:5432:5432"
+    - "5433:5432"
     environment:
       - POSTGRES_DB=${PSQL_NAME}
       - POSTGRES_USER=${PSQL_USER}
