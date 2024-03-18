@@ -1,5 +1,5 @@
 import React from 'react';
-import './app.css';
+import './App.css';
 import TokenTable from './components/token_table/token_table.tsx';
 import TokenForm from './components/token_form/token_form.tsx';
 import WalletList from './components/wallet_list/wallet_list.tsx';
