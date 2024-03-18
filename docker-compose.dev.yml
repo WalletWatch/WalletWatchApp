@@ -56,7 +56,6 @@ services:
       - .env.dev
   traefik:
     container_name: traefik_dev
-    image: traefik:v2.4
     build:
       context: .
       dockerfile: Dockerfile.traefik
