@@ -18,14 +18,11 @@ services:
       - ./backend:/backend
     depends_on:
       - psql
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.walletwatch-api.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)"
-      # - "traefik.http.services.walletwatch-api.loadbalancer.server.port=8000"
-      - "traefik.http.routers.walletwatch-api.tls=true"
-      - "traefik.http.routers.walletwatch-api.tls.certresolver=letsencrypt"
     expose:  # new
       - 8000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host(`271b83d7f474.vps.myjino.ru`)"
   celery:
     container_name: celery_dev
     build: ./backend
@@ -43,43 +40,23 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./frontend/src:/frontend/src
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.walletwatch.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/app/`)"
-      - "traefik.http.routers.walletwatch.entrypoints=web-secure"
-      - "traefik.http.services.app.loadbalancer.server.port=3000"
-    ports:
-      - "3000:3000"
+    expose:  # new
+      - 3000
     command: >
       sh -c "npm start"
     env_file:
       - .env.dev
   traefik:
-    container_name: traefik_dev
-    build:
-      context: .
-      dockerfile: Dockerfile.traefik
+    image: traefik:v2.9.6
     ports:
-      - 80:80
-      - 443:443
+      - 8008:80
+      - 8081:8080
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/etc/traefik/traefik.toml
-      - ./letsencrypt:/letsencrypt
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`271b83d7f474.vps.myjino.ru`)"
-      - "traefik.http.routers.dashboard.tls=true"
-      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=testuser:$$apr1$$jIKW.bdS$$eKXe4Lxjgy/rH65wP1iQe1"
+      - "$PWD/traefik.dev.toml:/etc/traefik/traefik.toml"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
 volumes:
-  letsencrypt:
   traefik-public-certificates:
-networks:
-  registry_default:
-    external: true
-
-
 # docker-compose up --scale celery=3
+
+# /walletwatch/dev/app/
