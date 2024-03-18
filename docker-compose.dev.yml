@@ -21,8 +21,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.walletwatch-api.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)"
-      - "traefik.http.services.walletwatch-api.loadbalancer.server.port=8000"
+      # - "traefik.http.services.walletwatch-api.loadbalancer.server.port=8000"
       - "traefik.http.routers.walletwatch-api.tls=true"
+      - "traefik.http.routers.walletwatch-api.tls.certresolver=letsencrypt"
+    expose:  # new
+      - 8000
   celery:
     container_name: celery_dev
     build: ./backend
@@ -32,17 +35,6 @@ services:
     depends_on:
       - psql
       - redis
-  traefik:
-    container_name: traefik_dev
-    image: traefik:v2.4
-    command: --providers.docker
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/etc/traefik/traefik.toml
-      - ./letsencrypt:/letsencrypt
   app:
     container_name: react_app_dev
     restart: on-failure
@@ -62,8 +54,30 @@ services:
       sh -c "npm start"
     env_file:
       - .env.dev
+  traefik:
+    container_name: traefik_dev
+    image: traefik:v2.4
+    build:
+      context: .
+      dockerfile: Dockerfile.traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./letsencrypt:/letsencrypt
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`271b83d7f474.vps.myjino.ru`)"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=testuser:$$apr1$$jIKW.bdS$$eKXe4Lxjgy/rH65wP1iQe1"
 volumes:
   letsencrypt:
+  traefik-public-certificates:
 networks:
   registry_default:
     external: true
