@@ -36,8 +36,10 @@ CHANNEL_LAYERS = {
     }
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+HOST_REDIS = os.environ.get("REDIS_HOST", "wallet_watch_app-redis")
+
+CELERY_BROKER_URL = "redis://" + HOST_REDIS + ":6379"
+CELERY_RESULT_BACKEND = "redis://" + HOST_REDIS+ ":6379"
 CELERY_IMPORTS = ("wallet.tasks",)
 
 # CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
