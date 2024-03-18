@@ -1,8 +1,10 @@
 version: '3'
 services:
   db:
-    container_name: db_dev
+  container_name: traefik_dev
     image: postgres
+    ports:
+    - "127.0.0.1:5432:5432"
     environment:
       - POSTGRES_DB=${PSQL_NAME}
       - POSTGRES_USER=${PSQL_USER}
@@ -13,7 +15,7 @@ services:
     container_name: api_dev
     build: ./backend
     env_file: .env.dev
-    command: bash -c "python manage.py migrate && daphne -p 8000 project.asgi:application"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/backend
     depends_on:
