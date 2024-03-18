@@ -20,7 +20,7 @@ services:
       - psql
     expose:  # new
       - 8000
-     labels:
+    labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api-dev.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)"
       - "traefik.http.services.api-dev.loadbalancer.server.port=8000"
