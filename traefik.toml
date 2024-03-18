@@ -9,7 +9,7 @@
   # Настройка провайдеров
   [http.routers]
     [http.routers.api-dev]
-      rule = "Host(`gryumova.ru`) || Host(`gryumova.ru`)"
+      rule = "Host(`271b83d7f474.vps.myjino.ru`)"
       service = "api-dev"
       entryPoints = ["web"]
 
@@ -17,7 +17,7 @@
   [http.services]
     [http.services.api-dev.loadBalancer]
       [[http.services.api-dev.loadBalancer.servers]]
-        url = "http://localhost:8000"
+        url = "http://api-dev:8000"
 
 # Конфигурация провайдеров
 [providers]
