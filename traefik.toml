@@ -1,18 +1,29 @@
-# listen on port 80
+# Настройка точек входа
 [entryPoints]
   [entryPoints.web]
     address = ":80"
 
-# Traefik dashboard over http
-[api]
-insecure = true
+# Конфигурация маршрутов HTTP
+[http]
 
-[log]
-level = "DEBUG"
+  # Настройка провайдеров
+  [http.routers]
+    [http.routers.api-dev]
+      rule = "Host(`gryumova.ru`) || Host(`gryumova.ru`)"
+      service = "api-dev"
+      entryPoints = ["web"]
 
-[accessLog]
+  # Настройка сервисов
+  [http.services]
+    [http.services.api-dev.loadBalancer]
+      [[http.services.api-dev.loadBalancer.servers]]
+        url = "http://localhost:8000"
 
-# containers are not discovered automatically
+# Конфигурация провайдеров
 [providers]
   [providers.docker]
     exposedByDefault = false
+
+# Настройка логирования
+[log]
+  level = "DEBUG"
