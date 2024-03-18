@@ -30,7 +30,9 @@ ASGI_APPLICATION = "project.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+        "CONFIG": {
+            "hosts": [(os.environ.get("REDIS_HOST", "wallet_watch_app-redis"), 6379)],
+        },
     }
 }
 
