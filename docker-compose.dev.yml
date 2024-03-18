@@ -52,17 +52,17 @@ services:
     env_file:
       - .env.dev
   traefik:
-  image: "traefik:v2.5"
-  restart: always
-  command:
-    - "--api.insecure=true"
-    - "--providers.docker=true"
-    - "--entrypoints.web.address=:80"
-  ports:
-    - "80:80"
-    - "8080:8080"  # Для доступа к панели управления Traefik (опционально)
-  volumes:
-    - "/var/run/docker.sock:/var/run/docker.sock"
+    image: "traefik:v2.5"
+    restart: always
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Для доступа к панели управления Traefik (опционально)
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 volumes:
   traefik-public-certificates:
