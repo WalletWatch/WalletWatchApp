@@ -13,7 +13,7 @@ services:
     container_name: wallet_watch_app-redis
   web:
     build:
-      context: ./app
+      context: ./backend
       dockerfile: Dockerfile.prod
     env_file: .env.dev
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
