@@ -27,6 +27,10 @@
     --ag-header-column-separator-width: 0px;
     --ag-header-column-separator-color: #dddddd;
 }
+
+.ag-theme-quartz, .ag-theme-quartz-dark, .ag-theme-quartz-auto-dark  {
+    --ag-border-color: #e0e0e0;
+}
 .ag-theme-quartz .ag-header-cell-label {
     font-weight: 600;
 }

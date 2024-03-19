@@ -22,10 +22,22 @@ services:
   redis:
     image: redis:latest
     container_name: wallet_watch_app-redis
+  celery:
+    container_name: celery_dev
+    build: ./backend
+    command: celery -A project worker --loglevel=info --beat
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - psql
+      - redis
+      - django
+    environment:
+    - REDIS_HOST=wallet_watch_app-redis
   django:
     build: ./backend
     env_file: .env.dev
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
       - traefik
       - psql 
@@ -36,7 +48,7 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/`)" # Ваш домен
+      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/api/`)" # Ваш домен
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react:
     build: ./frontend
@@ -48,7 +60,7 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && Path(`/app`)" # Ваш домен
+      - "traefik.http.routers.react.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`)" # Ваш домен
       - "traefik.http.services.react.loadbalancer.server.port=3000"
 
 networks:

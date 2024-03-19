@@ -42,13 +42,6 @@ CELERY_BROKER_URL = "redis://" + HOST_REDIS + ":6379"
 CELERY_RESULT_BACKEND = "redis://" + HOST_REDIS+ ":6379"
 CELERY_IMPORTS = ("wallet.tasks",)
 
-# CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
-# CELERY_BEAT_SCHEDULE = {
-#     "realtime_task_schedule": {
-#         "task": "wallet.tasks.realtime_task",
-#         "schedule": 15,
-#     },
-# }
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",

@@ -14,22 +14,16 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    # - name: Build and push Docker images
-    #   run: |
-    #     docker network create web
-    #     docker-compose --env-file .env.prod -f docker-compose.prod.yml build
-    #     docker-compose --env-file .env.prod -f docker-compose.prod.yml push
-    #     docker-compose --env-file .env.dev -f docker-compose.dev.yml build
-    #     docker-compose --env-file .env.dev -f docker-compose.dev.yml push
-
     - name: Deploy to production
       if: github.ref == 'refs/heads/main'
-      run: docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
+      run: |
+        docker stop $(docker ps -a -q)
+        docker rm $(docker ps -a -q)
+        docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
 
     - name: Deploy to development
       if: github.ref == 'refs/heads/docker'
       run: |
         docker stop $(docker ps -a -q)
         docker rm $(docker ps -a -q)
-        docker-compose --env-file .env.dev -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml up -d
+        docker-compose --env-file .env.dev -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.dev.yml up -d
