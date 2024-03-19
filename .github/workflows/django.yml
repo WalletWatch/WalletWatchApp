@@ -17,6 +17,7 @@ jobs:
 
     - name: Build and push Docker images
       run: |
+        docker network create web
         docker-compose --env-file .env.prod -f docker-compose.prod.yml build
         docker-compose --env-file .env.prod -f docker-compose.prod.yml push
         docker-compose --env-file .env.dev -f docker-compose.dev.yml build
