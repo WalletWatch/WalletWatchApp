@@ -23,7 +23,7 @@ services:
     image: redis:latest
     container_name: wallet_watch_app-redis
   django:
-    build: /backend
+    build: ./backend
     env_file: .env.dev
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     labels:
