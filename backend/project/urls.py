@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from wallet import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("walletwatch/dev/api/admin/", admin.site.urls),
     path("walletwatch/dev/api/wallet/", views.wallet_list),
     path("walletwatch/dev/api/balance/", views.balance_list),
     path("walletwatch/dev/api/balance/<int:pk>/", views.balance_detail),
