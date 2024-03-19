@@ -1,7 +1,7 @@
 version: '3'
 services:
   psql:
-    container_name: db_dev
+    container_name: psql
     image: postgres
     environment:
       - POSTGRES_DB=${PSQL_NAME}
