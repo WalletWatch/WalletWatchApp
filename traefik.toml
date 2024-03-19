@@ -1,29 +1,18 @@
-# Настройка точек входа
+# listen on port 80
 [entryPoints]
   [entryPoints.web]
     address = ":80"
 
-# Конфигурация маршрутов HTTP
-[http]
+# Traefik dashboard over http
+[api]
+insecure = true
 
-  # Настройка провайдеров
-  [http.routers]
-    [http.routers.api-dev]
-      rule = "Host(`271b83d7f474.vps.myjino.ru`)"
-      service = "api-dev"
-      entryPoints = ["web"]
+[log]
+level = "DEBUG"
 
-  # Настройка сервисов
-  [http.services]
-    [http.services.api-dev.loadBalancer]
-      [[http.services.api-dev.loadBalancer.servers]]
-        url = "http://api-dev:8000"
+[accessLog]
 
-# Конфигурация провайдеров
+# containers are not discovered automatically
 [providers]
   [providers.docker]
     exposedByDefault = false
-
-# Настройка логирования
-[log]
-  level = "DEBUG"

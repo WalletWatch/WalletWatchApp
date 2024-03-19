@@ -28,7 +28,7 @@ jobs:
 
     - name: Deploy to development
       if: github.ref == 'refs/heads/docker'
-      run: docker-compose --env-file .env.dev -f docker-compose.dev.yml up -d
+      run: docker-compose --env-file .env.dev -f docker-compose.prod.yml up -d
 
 
 # name: Django CI

@@ -20,12 +20,7 @@ services:
     depends_on:
       - psql
       - redis
-    expose:  # new
-      - 8000
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api-dev.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)"
-      - "traefik.http.services.api-dev.loadbalancer.server.port=8000"
+    ports: [8000]
     environment:
       - REDIS_HOST=wallet_watch_app-redis  # Указываем имя контейнера Redis
   celery:
@@ -37,8 +32,7 @@ services:
     depends_on:
       - psql
       - redis
-    ports:
-      - "8000:8000"
+    ports: [8000]
     environment:
     - REDIS_HOST=wallet_watch_app-redis
   app:
@@ -49,31 +43,22 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./frontend/src:/frontend/src
-    expose:
-      - 3000
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.react-app.rule=Host(`271b83d7f474.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/app/`)"
-      - "traefik.http.services.react-app.loadbalancer.server.port=3000"
+    ports: [3000]
     command: >
       sh -c "npm start"
     env_file:
       - .env.dev
   traefik:
-    image: "traefik:v2.5"
+    container_name: traefik
+    image: traefik:latest
     restart: always
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-      - "8080:8080"  # Для доступа к панели управления Traefik (опционально)
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "./traefik.toml:/etc/traefik/traefik.toml"
 
-volumes:
-  traefik-public-certificates:
-# docker-compose up --scale celery=3
-
-# /walletwatch/dev/app/
+networks:
+  default:
+    external: 
+      name: traefik
