@@ -36,6 +36,6 @@ COPY --from=build /frontend/build /usr/share/nginx/html
 
 # Опционально можно добавить настройки конфигурации Nginx, например, для обработки маршрутов React-приложения
 # COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
-
+EXPOSE 80
 # Команда по умолчанию запускает Nginx при старте контейнера
 CMD ["nginx", "-g", "daemon off;"]
