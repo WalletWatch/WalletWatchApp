@@ -50,12 +50,12 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/api/`)" # Ваш домен
+      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)" # Ваш домен
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react:
-    build: ./frontend
-    env_file: .env.dev
-    command: sh -c "npm start"
+    image: nginx:latest
+    volumes:
+      - ./path/to/your/react/app/build:/usr/share/nginx/html/app
     depends_on:
       - traefik
     expose:
