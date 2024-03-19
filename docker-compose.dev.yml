@@ -63,7 +63,7 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && Path(`/app`)" # Ваш домен
+      - "traefik.http.routers.react.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`)" # Ваш домен
       - "traefik.http.services.react.loadbalancer.server.port=3000"
 
 networks:
