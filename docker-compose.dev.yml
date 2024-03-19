@@ -53,9 +53,9 @@ services:
       - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)" # Ваш домен
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react:
-    image: nginx:latest
-    volumes:
-      - ./path/to/your/react/app/build:/usr/share/nginx/html/app
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     depends_on:
       - traefik
     expose:

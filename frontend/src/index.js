@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import './index.css';
 import App from './App.tsx';
@@ -11,11 +10,7 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
-        <Router>
-            <Switch>
-                <Route path="/app" exact component={App} />
-            </Switch>
-        </Router>
+        <App/>
     </Provider>
 );
 
