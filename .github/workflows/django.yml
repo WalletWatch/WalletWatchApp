@@ -15,13 +15,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Build and push Docker images
-      run: |
-        docker network create web
-        docker-compose --env-file .env.prod -f docker-compose.prod.yml build
-        docker-compose --env-file .env.prod -f docker-compose.prod.yml push
-        docker-compose --env-file .env.dev -f docker-compose.dev.yml build
-        docker-compose --env-file .env.dev -f docker-compose.dev.yml push
+    # - name: Build and push Docker images
+    #   run: |
+    #     docker network create web
+    #     docker-compose --env-file .env.prod -f docker-compose.prod.yml build
+    #     docker-compose --env-file .env.prod -f docker-compose.prod.yml push
+    #     docker-compose --env-file .env.dev -f docker-compose.dev.yml build
+    #     docker-compose --env-file .env.dev -f docker-compose.dev.yml push
 
     - name: Deploy to production
       if: github.ref == 'refs/heads/main'
@@ -29,63 +29,4 @@ jobs:
 
     - name: Deploy to development
       if: github.ref == 'refs/heads/docker'
-      run: docker-compose --env-file .env.dev -f docker-compose.prod.yml up -d
-
-
-# name: Django CI
-
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
-
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       max-parallel: 4
-#       matrix:
-#         python-version: [3.9]
-#     services:
-#       postgres:
-#         image: postgres:12
-#         env:
-#           POSTGRES_USER: core
-#           POSTGRES_PASSWORD: 12345678
-#           POSTGRES_DB: coredb
-#         ports:
-#           - 5432:5432
-#         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: Set up Python ${{ matrix.python-version }}
-#       uses: actions/setup-python@v2
-#       with:
-#         python-version: ${{ matrix.python-version }}
-#     - name: psycopg2 prerequisites
-#       run: sudo apt-get install python-dev libpq-dev
-#     - name: Install Dependencies
-#       run: |
-#         python -m pip install --upgrade pip
-#         pip install -r requirements.txt
-#     - name: Run Tests
-#       run: |
-#         python manage.py test
-
-#   deploy:
-#     name: Deploying
-#     needs: [test]
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Deploying Application
-#       uses: appleboy/ssh-action@master
-#       with:
-#         host: ${{ secrets.SSH_AWS_SERVER_IP }}
-#         username: ${{ secrets.SSH_SERVER_USER }}
-#         key: ${{ secrets.SSH_PRIVATE_KEY }}
-#         passphrase: ${{ secrets.SSH_PASSPHRASE }}
-#         script: |
-#           cd ~/.scripts
-#           ./docker-deploy.sh
+      run: docker-compose --env-file .env.dev -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml up -d
