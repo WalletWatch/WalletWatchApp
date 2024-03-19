@@ -25,7 +25,7 @@ services:
   django:
     build: ./backend
     env_file: .env.dev
-    command: bash -c "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - traefik
       - psql 
