@@ -32,6 +32,8 @@ services:
       - psql
       - redis
       - django
+    expose:
+      - "8001"
     environment:
       - REDIS_HOST=wallet_watch_app-redis
   django:
