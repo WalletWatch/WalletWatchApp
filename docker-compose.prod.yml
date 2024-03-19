@@ -36,7 +36,7 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && Path(`/walletwatch/`)" # Ваш домен
+      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/`)" # Ваш домен
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react:
     build: ./frontend
