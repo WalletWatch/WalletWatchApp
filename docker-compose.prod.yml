@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  traefik:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
   psql:
     container_name: db_dev
     image: postgres
@@ -11,33 +22,25 @@ services:
   redis:
     image: redis:latest
     container_name: wallet_watch_app-redis
-  web:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
+  django:
+    build: /backend
     env_file: .env.dev
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    expose:
-      - 8000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru`)"
+      - "traefik.http.services.django.loadbalancer.server.port=8000"
+    depends_on:
+      - traefik
+      - psql 
+      - redis
     environment:
       - REDIS_HOST=wallet_watch_app-redis  # Указываем имя контейнера Redis
-    depends_on:
-      - psql
-      - redis
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`django-traefik.gryumova.ru`)"
-  traefik:
-    build:
-      context: .
-      dockerfile: Dockerfile.traefik
     ports:
-      - 80:80
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`dashboard-django-traefik.gryumova.ru`)"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=testuser:$$apr1$$jIKW.bdS$$eKXe4Lxjgy/rH65wP1iQe1"
+      - "8000:8000"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
