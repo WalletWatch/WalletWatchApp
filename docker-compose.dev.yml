@@ -33,7 +33,7 @@ services:
       - redis
       - django
     environment:
-    - REDIS_HOST=wallet_watch_app-redis
+      - REDIS_HOST=wallet_watch_app-redis
   django:
     build: ./backend
     env_file: .env.dev
