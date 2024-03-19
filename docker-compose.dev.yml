@@ -1,7 +1,19 @@
-version: '3'
+version: '3.8'
+
 services:
+  traefik:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
   psql:
-    container_name: psql
+    container_name: db_dev
     image: postgres
     environment:
       - POSTGRES_DB=${PSQL_NAME}
@@ -10,55 +22,35 @@ services:
   redis:
     image: redis:latest
     container_name: wallet_watch_app-redis
-  api-dev:
-    container_name: api_dev
+  django:
     build: ./backend
     env_file: .env.dev
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - ./backend:/backend
     depends_on:
-      - psql
+      - traefik
+      - psql 
       - redis
-    ports: [8000]
     environment:
       - REDIS_HOST=wallet_watch_app-redis  # Указываем имя контейнера Redis
-  celery:
-    container_name: celery_dev
-    build: ./backend
-    command: celery -A project worker --loglevel=info --beat
-    volumes:
-      - ./backend:/backend
+    expose:
+      - "8000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/`)" # Ваш домен
+      - "traefik.http.services.django.loadbalancer.server.port=8000"
+  react:
+    build: ./frontend
+    env_file: .env.dev
+    command: sh -c "npm start"
     depends_on:
-      - psql
-      - redis
-    ports: [8000]
-    environment:
-    - REDIS_HOST=wallet_watch_app-redis
-  app:
-    container_name: react_app_dev
-    restart: on-failure
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend/src:/frontend/src
-    ports: [3000]
-    command: >
-      sh -c "npm start"
-    env_file:
-      - .env.dev
-  traefik:
-    container_name: traefik
-    image: traefik:latest
-    restart: always
-    ports:
-      - "80:80"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - "./traefik.toml:/etc/traefik/traefik.toml"
+      - traefik
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && Path(`/app`)" # Ваш домен
+      - "traefik.http.services.react.loadbalancer.server.port=3000"
 
 networks:
-  default:
-    external: 
-      name: traefik
+  web:
+    external: true
