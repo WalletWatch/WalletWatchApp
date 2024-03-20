@@ -24,6 +24,8 @@ jobs:
     - name: Deploy to development
       if: github.ref == 'refs/heads/docker'
       run: |
-        docker stop $(docker ps -a -q)
-        docker rm $(docker ps -a -q)
+        if docker ps | grep -q -v CONTAINER; then
+          docker stop $(docker ps -a -q)
+          docker rm $(docker ps -a -q)
+        fi
         docker-compose --env-file .env.dev -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.dev.yml up -d
