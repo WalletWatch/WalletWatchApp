@@ -13,7 +13,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
   psql:
-    container_name: db_dev
+    container_name: psql
     image: postgres
     environment:
       - POSTGRES_DB=${PSQL_NAME}
