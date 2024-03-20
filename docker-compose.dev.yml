@@ -66,8 +66,8 @@ services:
       dockerfile: Dockerfile
     env_file: .env.dev 
     volumes:
-      - ./frontend:/frontend
-    command: npm start
+      - ./frontend/src:/frontend/src
+    command: sh -c "npm start"
     depends_on:
       - traefik
     expose:
