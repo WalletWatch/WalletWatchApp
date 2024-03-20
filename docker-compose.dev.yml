@@ -52,7 +52,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/walletwatch/dev/api/`)" # Ваш домен
       - "traefik.http.services.django.loadbalancer.server.port=8000"
-      - "traefik.http.routers.django.rule=1"
   react:
     build:
       context: ./frontend
@@ -65,9 +64,8 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`)" # Ваш домен
+      - "traefik.http.routers.react.rule=Host(`dev.app.c0d2aa9fd631.vps.myjino.ru`)" # Ваш домен
       - "traefik.http.services.react.loadbalancer.server.port=3000"
-      - "traefik.http.routers.react.rule=2"
 
 networks:
   web:
