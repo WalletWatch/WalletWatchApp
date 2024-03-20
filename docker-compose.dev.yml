@@ -65,7 +65,7 @@ services:
       - "traefik.http.routers.django.priority=2"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
       # Маршрут для WebSocket
-      - "traefik.http.routers.django-ws.rule=Host(`dev.api.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.django-ws.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
       - "traefik.http.routers.django.priority=3"
       - "traefik.http.routers.django-ws.service=django"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
