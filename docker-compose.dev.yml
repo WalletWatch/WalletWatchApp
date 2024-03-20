@@ -13,8 +13,8 @@ services:
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"  # Добавьте эту строку для использования Let's Encrypt
       - "--certificatesresolvers.myresolver.acme.email=e.gryumova@gmail.com"  # Замените на вашу электронную почту для Let's Encrypt
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"  # Замените на путь для сохранения сертификатов
-      - "--certificatesresolvers.myresolver.acme.keyFile=/etc/ssl/private/ssl-cert-snakeoil.pem"
-      - "--certificatesresolvers.myresolver.acme.certFile=/etc/ssl/certs/ssl-cert-snakeoil.pem"
+      - "--certificatesresolvers.myresolver.acme.keyFile=/letsencrypt/ssl-cert-snakeoil.pem"
+      - "--certificatesresolvers.myresolver.acme.certFile=/letsencrypt/ssl-cert-snakeoil.pem"
 
     ports:
       - "80:80"
@@ -22,6 +22,8 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./letsencrypt:/letsencrypt"
+      - "/etc/ssl/private/ssl-cert-snakeoil.pem:/letsencrypt/ssl-cert-snakeoil.pem"
+      - "/etc/ssl/certs/ssl-cert-snakeoil.pem:/letsencrypt/ssl-cert-snakeoil.pem"
   psql:
     container_name: psql
     image: postgres
