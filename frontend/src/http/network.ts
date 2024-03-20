@@ -5,17 +5,17 @@ import axios from "axios";
 let host = process.env.REACT_APP_API_URL;
 
 export const fetchNetwork = async () => {
-    const {data} = await axios.get(`http://${host}/api/network/`)
+    const {data} = await axios.get(`https://${host}/api/network/`)
 
     return data.data;
 }
 
 export const fetchOneNetwork = async (id:number) => {
-    const {data} = await axios.get(`http://${host}/api/network/` + id + "/");
+    const {data} = await axios.get(`https://${host}/api/network/` + id + "/");
     return data;
 }
 
 export const deleteNetwork = async (id:number) => {
-    const {data} = await axios.delete(`http://${host}/api/network/` + id + "/");
+    const {data} = await axios.delete(`https://${host}/api/network/` + id + "/");
     return data;
 }
