@@ -6,16 +6,14 @@ from os import environ
 
 from wallet import views
 
-PATH = environ.get("DJANGO_PATH", "")
-
 urlpatterns = [
-    path(PATH + "admin/", admin.site.urls),
-    path(PATH + "wallet/", views.wallet_list),
-    path(PATH + "balance/", views.balance_list),
-    path(PATH + "balance/<int:pk>/", views.balance_detail),
-    path(PATH + "wallet/<int:pk>/", views.wallet_detail),
-    path(PATH + "network/", views.network_list),
-    path(PATH + "network/<int:pk>/", views.network_detail),
+    path("admin/", admin.site.urls),
+    path("api/wallet/", views.wallet_list),
+    path("api/balance/", views.balance_list),
+    path("api/balance/<int:pk>/", views.balance_detail),
+    path("api/wallet/<int:pk>/", views.wallet_detail),
+    path("api/network/", views.network_list),
+    path("api/network/<int:pk>/", views.network_detail),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
