@@ -16,6 +16,7 @@ import { updateToken } from '../../store/actions.ts';
 import { RootState } from '../../store/store.ts';
 import LastUpdate from './menu_item.jsx';
 
+let host = process.env.REACT_APP_API_URL;
 
 type Token = {
     id: number;
@@ -89,7 +90,7 @@ function TokenTable() {
 
     useEffect(() => {
         
-        const chatSocket =  new WebSocket(`ws://dev.c0d2aa9fd631.vps.myjino.ru/ws/wallet/`);
+        const chatSocket =  new WebSocket(`ws://${host}/ws/wallet/`);
 
         chatSocket.onmessage = function(e:any) {
             const data = JSON.parse(e.data);
