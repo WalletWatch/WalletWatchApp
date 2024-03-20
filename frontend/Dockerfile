@@ -6,6 +6,4 @@ RUN npm --force install
 
 COPY . .
 
-RUN npm start
-
 CMD ["npm", "start"]
