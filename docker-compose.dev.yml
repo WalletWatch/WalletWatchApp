@@ -42,7 +42,7 @@ services:
       dockerfile: Dockerfile
     env_file: .env.dev
     volumes:
-      - ./backend:./backend
+      - ./backend:/backend
     command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
       - traefik
@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile
     env_file: .env.dev 
     volumes:
-      - ./frontend/src:./frontend/src
+      - ./frontend/src:/frontend/src
     command: sh -c "npm start"
     depends_on:
       - traefik
