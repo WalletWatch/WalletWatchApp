@@ -65,8 +65,10 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     env_file: .env.dev 
+    environment:
+      - REACT_APP_API_URL=dev.api.c0d2aa9fd631.vps.myjino.ru
     volumes:
-      - ./frontend/src:/frontend/src
+      - ./frontend:/frontend
     command: sh -c "npm start"
     depends_on:
       - traefik
