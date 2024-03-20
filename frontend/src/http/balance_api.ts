@@ -5,6 +5,8 @@ import axios from "axios"
 let host = process.env.REACT_APP_API_URL;
 let path = process.env.DJANGO_PATH
 
+console.log(path)
+
 export const fetchBalance = async () => {
     const {data} = await axios.get(`http://${host}/${path}balance/`)
 

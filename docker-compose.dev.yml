@@ -57,13 +57,14 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     env_file: .env.dev
+    command: sh -c "npm start"
     depends_on:
       - traefik
     expose:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`)" # Ваш домен
+      - "traefik.http.routers.react.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && Path(`/`)" # Ваш домен
       - "traefik.http.services.react.loadbalancer.server.port=3000"
 
 networks:
