@@ -67,7 +67,7 @@ services:
     env_file: .env.dev 
     volumes:
       - ./frontend:/frontend
-    command: sh -c "npm start"
+    command: npm start
     depends_on:
       - traefik
     expose:
