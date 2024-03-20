@@ -70,7 +70,7 @@ services:
       - ./frontend/src:/frontend/src
     command: sh -c "npm start"
     depends_on:
-      - traefik
+      - traefik_dev
     expose:
       - "3000"
     labels:
