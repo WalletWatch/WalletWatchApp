@@ -37,9 +37,11 @@ services:
     environment:
       - REDIS_HOST=wallet_watch_app-redis
   django:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     env_file: .env.dev
-    command: bash -c "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
+    command: bash -c "python manage.py clearcache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
       - traefik
       - psql 
