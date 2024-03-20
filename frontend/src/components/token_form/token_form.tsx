@@ -50,7 +50,7 @@ function TokenForm() {
         control: (styles, state) => ({ 
             ...styles, 
             fontSize: "13px",
-            fontFamily: "'Roboto Mono', monospace;",
+            fontFamily: "'Fragment Mono', monospace;",
             border: '1px solid #e9ecef', 
             margin: "5px",
             marginBottom: "0px",
@@ -69,7 +69,7 @@ function TokenForm() {
 
             fontWeight: "normal",
             fontSize: "11px",
-            fontFamily: "'Roboto Mono', monospace;",
+            fontFamily: "'Fragment Mono', monospace;",
 
             cursor: 'pointer',
             border: state.isFocused? '1px solid #e9ecef': "1px solid transparent",
@@ -78,7 +78,7 @@ function TokenForm() {
             ...provided,
             color: "black",
             fontSize: "11px",
-            fontFamily: "'Roboto Mono', monospace;",
+            fontFamily: "'Fragment Mono', monospace;",
             margin: "5px",
         }),
         menu: (provided, state) => ({

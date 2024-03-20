@@ -1,49 +1,41 @@
 version: '3.8'
 
 services:
-  traefik:
+  traefik_dev:
     image: traefik:v2.5
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
-      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
-      # - "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myhttpchallenge.acme.email=e.gryumova@gmail.com"
-      - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
-  psql:
-    container_name: psql
+  psql_dev:
+    container_name: psql_dev
     image: postgres
     environment:
       - POSTGRES_DB=${PSQL_NAME}
       - POSTGRES_USER=${PSQL_USER}
       - POSTGRES_PASSWORD=${PSQL_PASSWORD}
-  redis:
+  redis_dev:
     image: redis:latest
-    container_name: wallet_watch_app-redis
-  celery:
+    container_name: wallet_watch_app_redis_dev
+  celery_dev:
     container_name: celery_dev
     build: ./backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
       - ./backend:/backend
     depends_on:
-      - psql
-      - redis
-      - django
+      - psql_dev
+      - redis_dev
+      - django_dev
     expose:
       - "8001"
     environment:
       - REDIS_HOST=wallet_watch_app-redis
-  django:
+  django_dev:
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -52,24 +44,24 @@ services:
       - ./backend:/backend
     command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
-      - traefik
-      - psql 
-      - redis
+      - traefik_dev
+      - psql_dev
+      - redis_dev
     environment:
       - REDIS_HOST=wallet_watch_app-redis  # Указываем имя контейнера Redis
     expose:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru` ) || Host(`gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
-      - "traefik.http.routers.django.priority=2"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - "traefik.http.routers.django_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.routers.django_dev.priority=2"
+      - "traefik.http.services.django_dev.loadbalancer.server.port=8000"
       # Маршрут для WebSocket
-      - "traefik.http.routers.django-ws.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
-      - "traefik.http.routers.django.priority=3"
-      - "traefik.http.routers.django-ws.service=django"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
-  react:
+      - "traefik.http.routers.django_dev-ws.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.django_dev.priority=3"
+      - "traefik.http.routers.django_dev-ws.service=django_dev"
+      - "traefik.http.services.django_dev.loadbalancer.server.port=8000"
+  react_dev:
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -83,9 +75,9 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) || Host(`gryumova.ru`)" # Ваш домен
-      - "traefik.http.routers.react.priority=1"
-      - "traefik.http.services.react.loadbalancer.server.port=3000"
+      - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)" # Ваш домен
+      - "traefik.http.routers.react_dev.priority=1"
+      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
 
 networks:
   web:

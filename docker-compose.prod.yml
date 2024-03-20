@@ -7,13 +7,20 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
+      # - "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=e.gryumova@gmail.com"
+      - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
-      - "8080:8080"
+      - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  db:
-    container_name: db
+      - "./letsencrypt:/letsencrypt"
+  psql:
+    container_name: psql
     image: postgres
     environment:
       - POSTGRES_DB=${PSQL_NAME}
@@ -21,20 +28,21 @@ services:
       - POSTGRES_PASSWORD=${PSQL_PASSWORD}
   redis:
     image: redis:latest
-    container_name: wallet_watch_app-redis-prod
+    container_name: wallet_watch_app-redis
   celery:
+    container_name: celery
     build: ./backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
       - ./backend:/backend
     depends_on:
-      - db
+      - psql
       - redis
       - django
     expose:
       - "8001"
     environment:
-      - REDIS_HOST=wallet_watch_app-redis-prod
+      - REDIS_HOST=wallet_watch_app-redis
   django:
     build:
       context: ./backend
@@ -45,7 +53,7 @@ services:
     command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
       - traefik
-      - db 
+      - psql 
       - redis
     environment:
       - REDIS_HOST=wallet_watch_app-redis  # Указываем имя контейнера Redis
@@ -53,10 +61,12 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`api.c0d2aa9fd631.vps.myjino.ru` ) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru` ) || Host(`gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.routers.django.priority=2"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
       # Маршрут для WebSocket
-      - "traefik.http.routers.django-ws.rule=Host(`api.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.django-ws.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.django.priority=3"
       - "traefik.http.routers.django-ws.service=django"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react:
@@ -73,7 +83,8 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`app.c0d2aa9fd631.vps.myjino.ru`)" # Ваш домен
+      - "traefik.http.routers.react.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) || Host(`gryumova.ru`)" # Ваш домен
+      - "traefik.http.routers.react.priority=1"
       - "traefik.http.services.react.loadbalancer.server.port=3000"
 
 networks:
