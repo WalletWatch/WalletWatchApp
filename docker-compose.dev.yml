@@ -7,11 +7,18 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"  # Добавьте эту строку для использования Let's Encrypt
+      - "--certificatesresolvers.myresolver.acme.email=e.gryumova@gmail.com"  # Замените на вашу электронную почту для Let's Encrypt
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"  # Замените на путь для сохранения сертификатов
     ports:
       - "80:80"
-      - "8080:8080"
+      - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
   psql:
     container_name: psql
     image: postgres
@@ -54,7 +61,7 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`dev.api.c0d2aa9fd631.vps.myjino.ru` ) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.routers.django.rule=Host(`dev.api.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.api.gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
       - "traefik.http.services.django.loadbalancer.server.port=8000"
       # Маршрут для WebSocket
       - "traefik.http.routers.django-ws.rule=Host(`dev.api.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
@@ -74,7 +81,7 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`dev.app.c0d2aa9fd631.vps.myjino.ru`)" # Ваш домен
+      - "traefik.http.routers.react.rule=Host(`dev.app.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.app.gryumova.ru`)" # Ваш домен
       - "traefik.http.services.react.loadbalancer.server.port=3000"
 
 networks:
