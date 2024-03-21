@@ -1,6 +1,5 @@
 import React from 'react';
-import * as copy from 'copy-to-clipboard';
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import RemoveWallet from "./remove_wallet.tsx";
 import "./wallet_item.css"

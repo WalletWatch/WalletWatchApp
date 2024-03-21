@@ -2,11 +2,10 @@ import axios from 'axios';
 
 // let host = 'c0d2aa9fd631.vps.myjino.ru'
 // let host = '127.0.0.1:8000';
-console.log(process.env);
 let host = process.env.REACT_APP_API_URL;
 
 export const fetchWallet = async () => {
-    const {data} = await axios.get(`https://${host}/api/wallet/`);
+    const {data} = await axios.get(`${host}/api/wallet/`);
 
     return data.data;
 }
@@ -18,17 +17,17 @@ export const createWallet = async (wallet) => {
         }
     }
     
-    const {data} = await axios.post(`https://${host}/api/wallet/`, wallet, config);
+    const {data} = await axios.post(`${host}/api/wallet/`, wallet, config);
     return data;
 }
 
 export const fetchOneWallet = async (id:number) => {
-    const {data} = await axios.get(`https://${host}/api/wallet/` + id + `/`);
+    const {data} = await axios.get(`${host}/api/wallet/` + id + `/`);
     return data;
 }
 
 export const deleteWallet = async (id:number) => {
-    const {data} = await axios.delete(`https://${host}/api/wallet/` + id + `/`);
+    const {data} = await axios.delete(`${host}/api/wallet/` + id + `/`);
     return data;
 }
 

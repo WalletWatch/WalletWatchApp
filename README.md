@@ -54,37 +54,25 @@
 
 ```bash
 git clone https://github.com/WalletWatch/wallet_watch_app.git
-cd WalletWatchApp
+cd wallet_watch_app
 
 python3 -m venv env
 source env/bin/activate
 ```
 
-2. Install Python dependencies:
+2. Run Python Django server with Redis and Celery:
 
 ```bash
-make prepare-python
+make run-server
 ```
 
-3. Install Node.js dependencies:
+3. Start the React app:
 
-```bash
-make prepare-npm
-```
-
-4. Start the application:
-
-To start the server, use:
-```bash
-make run
-```
-
-To start the client application:
 ```bash
 make run-client
 ```
 
-5. Go to [http://localhost:8000](http://localhost:8000/) in your web browser. (Check the port that your React application is running on)
+4. Go to [http://localhost:8000](http://localhost:8000/) in your web browser. (Check the port that your React application is running on)
 
 ## Usage
 
@@ -102,77 +90,16 @@ app.conf.beat_schedule = {
 
 ## Deploy the app
 
-1. **Configure Paths**: Within the `/infra/conf` directory, ensure to update the absolute paths to the working directory and virtual environments in all relevant files.
-
-2. Copy `.env.sample` to a new file called `.env` and configure the settings as described in the Environment variables section.
-
-| App Setting | Value | Note |
-| --- | --- | ------------- |
-|VENV_NAME|env|Name of the virtual environment|
-|PROJECT_DIR||Directory of the project|
-|HOST||Hostname or IP address|
-|NGINX_CONFIG|nginx.conf|Path to Nginx configuration file|
-|CELERY_SERVICE|celery.service|Name of the Celery service|
-|DAPHNE_SERVICE|daphne.conf|Configuration file for Daphne service|
-|POSTGRES_DB|wallet|Name of the PostgreSQL database|
-|POSTGRES_USER||PostgreSQL username|
-|POSTGRES_PASSWORD||PostgreSQL password|
-
-### Installation
-
-Clone this repository onto your remote server and execute the following commands:
-
-1. Clone Project Repository in server
-
-Clone your project repository and and go to the infra folder:
+1. Copy `.env.sample` to a new file called `.env.dev` and `.env.prod` and configure the settings as described in the Environment variables section.
+2. Install docker and docker-compose on your server.
+3. Set up your domain and A records, each of which points to the IP address of your server and open port 443 for external connection.
+4. Launch the docker containers using the following commands:
 
 ```bash
-git clone https://github.com/WalletWatch/wallet_watch_app.git
-cd infra
+docker-compose --env-file .env.prod -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml down
+docker-compose --env-file .env.prod -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml up -d
 ```
 
-2. Install Dependencies
-
-Install necessary packages and applications:
-
-```bash
-make configure_server
-```
-
-3. PostgreSQL Configuration
-
-Configure the PostgreSQL database with the credentials specified in the Makefile. Make changes if required:
-
-```bash
-make postgresql 
-```
-
-4. Nginx Setup
-
-Start the Nginx server:
-
-```bash
-make migrate 
-make nginx-conf
-```
-
-5. Build react app:
-
-```bash
-make react
-```
-
-6. Daphne, Redis, and Celery Configuration
-
-Configure Daphne, Redis, and Celery for ASGI support and background tasks:
-
-```bash
-make daphne-conf 
-make redis
-make celery-conf
-```
-
-7. You can see running app at `http://{host}/app`.
 
 ## Contributing to the project
 

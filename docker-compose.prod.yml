@@ -59,11 +59,11 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`c0d2aa9fd631.vps.myjino.ru` ) || Host(`gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.routers.django.rule=Host(`${WALLET_HOST_NAME}` ) || Host(`${WALLET_DOMAIN}`) && PathPrefix(`/api`)" # Ваш домен
       - "traefik.http.routers.django.priority=2"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
       # Маршрут для WebSocket
-      - "traefik.http.routers.django-ws.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.django-ws.rule=Host(`${WALLET_HOST_NAME}`) && PathPrefix(`/ws`)"
       - "traefik.http.routers.django.priority=3"
       - "traefik.http.routers.django-ws.service=django"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
@@ -81,7 +81,7 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) || Host(`gryumova.ru`)" # Ваш домен
+      - "traefik.http.routers.react.rule=Host(`${WALLET_HOST_NAME}`) || Host(`${WALLET_DOMAIN}`)" # Ваш домен
       - "traefik.http.routers.react.priority=1"
       - "traefik.http.services.react.loadbalancer.server.port=3000"
 

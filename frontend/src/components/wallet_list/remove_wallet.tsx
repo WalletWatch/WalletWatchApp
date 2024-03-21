@@ -5,6 +5,7 @@ import "./remove_wallet.css";
 import { removeToken, removeWallet } from "../../store/actions.ts";
 import { deleteWallet } from "../../http/wallet_api.ts";
 import { RootState } from '../../store/store';
+import { createSelector } from 'reselect';
 
 type Wallet = {
     id: number;
@@ -16,9 +17,17 @@ type RemoveWalletProps = {
     data: Wallet
 };
 
+const tokenSelector = (state: RootState) => state.token;
+
+const memoizedTokenSelector = createSelector(
+  tokenSelector,
+  (token) => Array.isArray(token) ? token : []
+);
+
+
 function RemoveWallet({data}: RemoveWalletProps) {
     const dispatch = useDispatch();
-    const balance: any[] = useSelector((state: RootState) => Array.isArray(state.token) ? state.token : []);
+    const balance: any[] = useSelector(memoizedTokenSelector);
 
     const handleClick = (e:any) => {
         e.preventDefault();

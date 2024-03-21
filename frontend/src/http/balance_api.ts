@@ -5,7 +5,7 @@ import axios from "axios"
 let host = process.env.REACT_APP_API_URL;
 
 export const fetchBalance = async () => {
-    const {data} = await axios.get(`https://${host}/api/balance/`)
+    const {data} = await axios.get(`${host}/api/balance/`)
 
     return data.data;
 }
@@ -16,17 +16,17 @@ export const createBalance = async (wallet) => {
          'Content-Type': 'multipart/form-data'        
         }
     }
-    const {data} = await axios.post(`https://${host}/api/balance/`, wallet, config);
+    const {data} = await axios.post(`${host}/api/balance/`, wallet, config);
     return data
 }
 
 export const fetchOneBalance = async (id) => {
-    const {data} = await axios.get(`https://${host}/api/balance/` + id + "/");
+    const {data} = await axios.get(`${host}/api/balance/` + id + "/");
     return data;
 }
 
 export const deleteBalance = async (id) => {
-    const {data} = await axios.delete(`https://${host}/api/balance/` + id + `/`);
+    const {data} = await axios.delete(`${host}/api/balance/` + id + `/`);
     return data;
 }
 
