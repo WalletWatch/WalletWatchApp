@@ -28,9 +28,9 @@
     <img src="/assets/wallet-4.gif" width="600">
 </div>
 
-- Ability to input ERC20, BEP20 wallet addresses. This simplifies the process of tracking balances on various wallets.
-- Ability to select tokens to track balance. Users can select tokens they want to track, giving more control over their cryptocurrency assets.
-- Display of balances in table form. This provides a clear and easily understandable view of the state of your cryptocurrency assets.
+- **Streamlined Wallet Tracking:** Input your ERC20 and BEP20 wallet addresses for seamless monitoring of multiple wallets in one place.
+- **Token Selection:** Choose specific tokens to track, providing granular control over your crypto portfolio.
+- **Balance Display:** Display of balances in table form. This provides a clear and easily understandable view of the state of your cryptocurrency assets.
 
 ## Requirements
 
@@ -90,14 +90,18 @@ app.conf.beat_schedule = {
 
 ## Deploy the app
 
-1. Copy `.env.sample` to a new file called `.env.dev` and `.env.prod` and configure the settings as described in the Environment variables section.
-2. Install docker and docker-compose on your server.
-3. Set up your domain and A records, each of which points to the IP address of your server and open port 443 for external connection.
-4. Launch the docker containers using the following commands:
+1. **Configuration:**<br/>
+  Copy `.env.sample` to `.env.dev` and `.env.prod`. Configure settings as per your environment.
+2. **Docker Setup:**<br/>
+  Install Docker and Docker Compose on your server.
+3. **Domain Setup:**<br/>
+  Configure your domain and A records to point to your server's IP address and open port 443 for external connection.
+4. **Launch Docker Containers:**<br/>
+  Launch the docker containers using the following commands:
 
 ```bash
-docker-compose --env-file .env.prod -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml down
-docker-compose --env-file .env.prod -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml up -d
+docker-compose --env-file .env.prod -f docker-compose.prod.yml down
+docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
 ```
 
 
