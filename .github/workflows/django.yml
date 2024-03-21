@@ -15,7 +15,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Deploy to production
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/docker'
       run: |
         docker-compose --env-file .env.prod -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml up -d
 
