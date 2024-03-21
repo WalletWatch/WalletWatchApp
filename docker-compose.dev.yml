@@ -58,8 +58,7 @@ services:
       - "traefik.http.services.django_dev.loadbalancer.server.port=8000"
       # Маршрут для WebSocket
       - "traefik.http.routers.django_dev-ws.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/ws`)"
-      - "traefik.http.routers.django_dev.priority=3"
-      - "traefik.http.routers.django_dev-ws.service=django_dev"
+      - "traefik.http.routers.django_dev-ws.priority=3"
       - "traefik.http.services.django_dev.loadbalancer.server.port=8000"
   react_dev:
     build:
