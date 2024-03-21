@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-let host = 'c0d2aa9fd631.vps.myjino.ru'
+// let host = 'c0d2aa9fd631.vps.myjino.ru'
 // let host = '127.0.0.1:8000';
-// let host = process.env.REACT_APP_API_URL;
+console.log(process.env);
+let host = process.env.REACT_APP_API_URL;
 
 export const fetchWallet = async () => {
     const {data} = await axios.get(`https://${host}/api/wallet/`);
