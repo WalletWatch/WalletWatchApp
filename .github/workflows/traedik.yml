@@ -13,8 +13,7 @@ jobs:
     needs: prepare-environment
     steps:
     - name: Checkout code
-        uses: actions/checkout@v2
-    
+      uses: actions/checkout@v2
     - name: Run traefik 
       run: |
         docker network create traefik_webgateway
