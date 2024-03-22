@@ -7,9 +7,7 @@ services:
     command:
       - "--api.dashboard=true"
       - "--log.level=INFO"
-      #- --log.filepath=/var/log/traefik.log
       - "--accesslog=true"
-      #- --accesslog.filepath=/var/log/traefik-access.log
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
     labels:
@@ -17,7 +15,7 @@ services:
       - traefik.http.routers.mydashboard.rule=Host(`c0d2aa9fd631.vps.myjino.ru`)
       - traefik.http.routers.mydashboard.service=api@internal
     ports:
-      - 80:80
+      - "80:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
