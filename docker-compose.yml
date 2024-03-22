@@ -1,25 +1,11 @@
 version: '3.8'
 
 services:
-  traefik:
-    image: traefik:v2.5
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
-      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=websecure"
-      # - "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myhttpchallenge.acme.email=e.gryumova@gmail.com"
-      - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
   psql:
     container_name: psql
     image: postgres
+    networks:
+      - traefik_webgateway
     environment:
       - POSTGRES_DB=${PSQL_NAME}
       - POSTGRES_USER=${PSQL_USER}
@@ -27,12 +13,16 @@ services:
   redis:
     image: redis:latest
     container_name: wallet_watch_app-redis
+    networks:
+      - traefik_webgateway
   celery:
     container_name: celery
     build: ./backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
       - ./backend:/backend
+    networks:
+      - traefik_webgateway
     depends_on:
       - psql
       - redis
@@ -45,7 +35,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    env_file: .env.prod
     volumes:
       - ./backend:/backend
     command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
@@ -53,15 +42,25 @@ services:
       - traefik
       - psql 
       - redis
+    networks:
+      - traefik_webgateway
     environment:
-      - REDIS_HOST=wallet_watch_app-redis  # Указываем имя контейнера Redis
+      - REDIS_HOST=wallet_watch_app-redis 
+      - PSQL_NAME=${PSQL_NAME}
+      - PSQL_USER=${PSQL_USER}
+      - PSQL_PASSWORD=${PSQL_PASSWORD}
+      - PSQL_HOST=${PSQL_HOST}
+      - PSQL_PORT=${PSQL_PORT}
     expose:
       - "8000"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.django.rule=Host(`${WALLET_HOST_NAME}` ) || Host(`${WALLET_DOMAIN}`) && PathPrefix(`/api`)" # Ваш домен
-      - "traefik.http.routers.django.priority=2"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - "traefik.http.routers.django.entrypoints=websecure"
+      - "traefik.http.routers.django.tls=true"
+      - "traefik.http.routers.django.priority=2"
+      - "traefik.docker.network=traefik_webgateway"
       # Маршрут для WebSocket
       - "traefik.http.routers.django-ws.rule=Host(`${WALLET_HOST_NAME}`) && PathPrefix(`/ws`)"
       - "traefik.http.routers.django.priority=3"
@@ -71,9 +70,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    env_file: .env.prod 
     volumes:
       - ./frontend/src:/frontend/src
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+    networks:
+      - traefik_webgateway
     command: sh -c "npm start"
     depends_on:
       - traefik
@@ -82,9 +84,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.react.rule=Host(`${WALLET_HOST_NAME}`) || Host(`${WALLET_DOMAIN}`)" # Ваш домен
-      - "traefik.http.routers.react.priority=1"
       - "traefik.http.services.react.loadbalancer.server.port=3000"
+      - "traefik.http.routers.react.entrypoints=websecure"
+      - "traefik.http.routers.react.tls=true"
+      - "traefik.http.routers.react.priority=1"
+      - "traefik.docker.network=traefik_webgateway"
 
 networks:
-  web:
+  traefik_webgateway:
     external: true
