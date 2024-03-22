@@ -6,21 +6,21 @@ on:
       - main
       - develop
       - traefik
-      
+
 jobs:
   prepare-environment:
     runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Stop and remove containers, networks
+      - name: Stop and remove containers, networks prod
         if: github.ref == 'refs/heads/main'
         run: |
-          docker-compose --env-file .env.prod -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml down
-      - name: Remove unused data
+          docker-compose --env-file .env.prod -f docker-compose.yml down
+      - name: Stop and remove containers, networks
         if: github.ref == 'refs/heads/docker'
         run: |
-          docker-compose --env-file .env.dev -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.dev.yml down
+          docker-compose --env-file .env.dev -f docker-compose.yml down
 
   deploy:
     runs-on: self-hosted
@@ -30,9 +30,9 @@ jobs:
     - name: Deploy to production
       if: github.ref == 'refs/heads/main'
       run: |
-        docker-compose --env-file .env.prod -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.prod.yml up -d
+        docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
 
     - name: Deploy to development
-      if: github.ref == 'refs/heads/docker'
+      if: github.ref == 'refs/heads/traefik'
       run: |
-        docker-compose --env-file .env.dev -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.dev.yml up -d
+        docker-compose --env-file .env.dev -f docker-compose.dev.yml up -d
