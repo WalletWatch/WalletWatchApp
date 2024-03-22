@@ -1,4 +1,4 @@
-name: Deploy
+name: Traefik
 
 on:
   push:
@@ -10,7 +10,6 @@ on:
 jobs:
   traefik:
     runs-on: self-hosted
-    needs: prepare-environment
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
