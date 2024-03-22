@@ -5,7 +5,8 @@ on:
     branches:
       - main
       - develop
-
+      - traefik
+      
 jobs:
   prepare-environment:
     runs-on: self-hosted

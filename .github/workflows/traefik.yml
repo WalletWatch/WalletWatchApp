@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - docker
-      - traefik
 
 jobs:
   traefik:
