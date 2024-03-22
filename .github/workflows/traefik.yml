@@ -16,4 +16,4 @@ jobs:
       - name: Run traefik 
         run: |
           docker network create traefik_webgateway
-          cd traefik && docker-compose docker-compose.yml up -d
+          cd traefik && docker-compose -f docker-compose.yml up -d
