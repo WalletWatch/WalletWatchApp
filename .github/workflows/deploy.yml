@@ -18,7 +18,7 @@ jobs:
         run: |
           docker-compose --env-file .env.prod -f docker-compose.yml down
       - name: Stop and remove containers, networks
-        if: github.ref == 'refs/heads/docker'
+        if: github.ref == 'refs/heads/traefik'
         run: |
           docker-compose --env-file .env.dev -f docker-compose.yml down
 

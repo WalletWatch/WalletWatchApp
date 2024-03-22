@@ -5,7 +5,7 @@ services:
     image: postgres
     container_name: psql
     networks:
-      - traefik_webgateway
+      - dev1
     environment:
       - POSTGRES_DB=${PSQL_NAME}
       - POSTGRES_USER=${PSQL_USER}
@@ -14,14 +14,14 @@ services:
     image: redis:latest
     container_name: wallet_watch_app-redis
     networks:
-      - traefik_webgateway
+      - dev1
   celery:
     build: ./backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
       - ./backend:/backend
     networks:
-      - traefik_webgateway
+      - dev1
     depends_on:
       - psql
       - redis
@@ -41,7 +41,8 @@ services:
       - psql 
       - redis
     networks:
-      - traefik_webgateway
+      - default
+      - dev1
     environment:
       - REDIS_HOST=wallet_watch_app-redis 
       - PSQL_NAME=${PSQL_NAME}
@@ -60,20 +61,19 @@ services:
       - "traefik.http.routers.django.priority=2"
       - "traefik.docker.network=traefik_webgateway"
       # Маршрут для WebSocket
-      - "traefik.http.routers.django-ws.rule=Host(`${WALLET_HOST_NAME}`) && PathPrefix(`/ws`)"
-      - "traefik.http.routers.django.priority=3"
-      - "traefik.http.routers.django-ws.service=django"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      # - "traefik.http.routers.django-ws.rule=Host(`${WALLET_HOST_NAME}`) && PathPrefix(`/ws`)"
+      # - "traefik.http.routers.django.priority=3"
+      # - "traefik.http.routers.django-ws.service=django"
+      # - "traefik.http.services.django.loadbalancer.server.port=8000"
   react:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    volumes:
-      - ./frontend/src:/frontend/src
     environment:
       - REACT_APP_API_URL=${REACT_APP_API_URL}
     networks:
-      - traefik_webgateway
+      - default
+      - dev1
     command: sh -c "npm start"
     expose:
       - "3000"
@@ -87,5 +87,8 @@ services:
       - "traefik.docker.network=traefik_webgateway"
 
 networks:
-  traefik_webgateway:
+  default:
     external: true
+    name: gateway
+  dev1:
+    internal: true

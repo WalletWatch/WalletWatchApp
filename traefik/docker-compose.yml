@@ -27,13 +27,14 @@ services:
       - "./letsencrypt:/letsencrypt"
     
     networks:
-      - traefik_webgateway
+      - default
     
     restart: always
 
 networks:
-  traefik_webgateway:
-    external: true
+  default:
+    external:
+      name: gateway
 
 volumes:
   letsencrypt:
