@@ -39,7 +39,6 @@ services:
       - ./backend:/backend
     command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
-      - traefik
       - psql 
       - redis
     networks:
@@ -77,8 +76,6 @@ services:
     networks:
       - traefik_webgateway
     command: sh -c "npm start"
-    depends_on:
-      - traefik
     expose:
       - "3000"
     labels:
