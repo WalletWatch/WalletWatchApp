@@ -30,9 +30,9 @@ jobs:
     - name: Deploy to production
       if: github.ref == 'refs/heads/main'
       run: |
-        docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
+        docker-compose --env-file .env.prod -f docker-compose.yml up -d
 
     - name: Deploy to development
       if: github.ref == 'refs/heads/traefik'
       run: |
-        docker-compose --env-file .env.dev -f docker-compose.dev.yml up -d
+        docker-compose --env-file .env.dev -f docker-compose.yml up -d
