@@ -5,14 +5,13 @@ services:
     image: "traefik:v2.9"
     container_name: "traefik"
     command:
-      - --api.dashboard=true
-      - --log.level=INFO
+      - "--api.dashboard=true"
+      - "--log.level=INFO"
       #- --log.filepath=/var/log/traefik.log
-      - --accesslog=true
+      - "--accesslog=true"
       #- --accesslog.filepath=/var/log/traefik-access.log
-      - --providers.docker.network=proxy
-      - --providers.docker.exposedByDefault=false
-      - --entrypoints.web.address=:80
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
     labels:
       - traefik.enable=true
       - traefik.http.routers.mydashboard.rule=Host(`traefik.c0d2aa9fd631.vps.myjino.ru`)
