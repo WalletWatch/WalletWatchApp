@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   psql:
-    container_name: psql
     image: postgres
+    container_name: psql
     networks:
       - traefik_webgateway
     environment:
@@ -16,7 +16,6 @@ services:
     networks:
       - traefik_webgateway
   celery:
-    container_name: celery
     build: ./backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
@@ -48,7 +47,7 @@ services:
       - PSQL_NAME=${PSQL_NAME}
       - PSQL_USER=${PSQL_USER}
       - PSQL_PASSWORD=${PSQL_PASSWORD}
-      - PSQL_HOST=${PSQL_HOST}
+      - PSQL_HOST=psql
       - PSQL_PORT=${PSQL_PORT}
     expose:
       - "8000"
