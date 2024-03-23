@@ -10,7 +10,7 @@ services:
     command: sh -c "npm start"
     depends_on:
       - traefik_dev
-    network:
+    networks:
       - web
     expose:
       - "3000"
