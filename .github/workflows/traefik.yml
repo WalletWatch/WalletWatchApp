@@ -15,4 +15,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Run traefik 
         run: |
+          docker stop $(docker ps -a -q)
+          docker rm $(docker ps -a -q)
+          docker network rm $(docker network ls -q)
+          docker network create --driver=bridge --attachable --internal=false gateway
           cd traefik && docker-compose -f docker-compose.yml up -d
