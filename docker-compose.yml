@@ -16,35 +16,56 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)" # Ваш домен
       - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
-  # psql:
-  #   image: postgres
-  #   container_name: psql
-  #   networks:
-  #     - dev1
-  #   environment:
-  #     - POSTGRES_DB=${PSQL_NAME}
-  #     - POSTGRES_USER=${PSQL_USER}
-  #     - POSTGRES_PASSWORD=${PSQL_PASSWORD}
-  # redis:
-  #   image: redis:latest
-  #   container_name: wallet_watch_app-redis
-  #   networks:
-  #     - dev1
-  # celery:
-  #   build: ./backend
-  #   command: celery -A project worker --loglevel=info --beat
-  #   volumes:
-  #     - ./backend:/backend
-  #   networks:
-  #     - dev1
-  #   depends_on:
-  #     - psql
-  #     - redis
-  #     - django
-  #   expose:
-  #     - "8001"
-  #   environment:
-  #     - REDIS_HOST=wallet_watch_app-redis
+      - "traefik.http.routers.django.priority=1"
+  psql:
+    image: postgres
+    container_name: psql
+    environment:
+      - POSTGRES_DB=${PSQL_NAME}
+      - POSTGRES_USER=${PSQL_USER}
+      - POSTGRES_PASSWORD=${PSQL_PASSWORD}
+  redis:
+    image: redis:latest
+    container_name: wallet_watch_app-redis
+  celery:
+    build: ./backend
+    command: celery -A project worker --loglevel=info --beat
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - psql
+      - redis
+      - django
+    expose:
+      - "8001"
+    environment:
+      - REDIS_HOST=wallet_watch_app-redis
+  django:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/backend
+    command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
+    depends_on:
+      - psql 
+      - redis
+    networks:
+      - web
+    environment:
+      - REDIS_HOST=wallet_watch_app-redis 
+      - PSQL_NAME=${PSQL_NAME}
+      - PSQL_USER=${PSQL_USER}
+      - PSQL_PASSWORD=${PSQL_PASSWORD}
+      - PSQL_HOST=psql
+      - PSQL_PORT=${PSQL_PORT}
+    expose:
+      - "8000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - "traefik.http.routers.django.priority=2"
   # django:
   #   build:
   #     context: ./backend
