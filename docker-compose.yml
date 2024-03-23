@@ -52,6 +52,7 @@ services:
       - redis
     networks:
       - web
+      - default
     environment:
       - REDIS_HOST=wallet_watch_app-redis 
       - PSQL_NAME=${PSQL_NAME}
