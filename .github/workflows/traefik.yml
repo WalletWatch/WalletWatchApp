@@ -20,3 +20,4 @@ jobs:
           docker network rm web
           docker network create --driver=bridge --attachable --internal=false web
           cd traefik && docker-compose --env-file .env.dev -f docker-compose.yml up -d
+          cd .. && docker-compose --env-file .env.dev -f docker-compose.yml up -d

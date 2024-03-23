@@ -12,10 +12,10 @@ services:
     image: redis:latest
     container_name: wallet_watch_app-redis
   celery:
-    build: ./backend
+    build: ../backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
-      - ./backend:/backend
+      - ../backend:/backend
     depends_on:
       - psql
       - redis
@@ -26,10 +26,10 @@ services:
       - REDIS_HOST=wallet_watch_app-redis
   django:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
     volumes:
-      - ./backend:/backend
+      - ../backend:/backend
     command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
       - psql 
@@ -48,24 +48,27 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.djadjango_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)" 
-      - "traefik.http.routers.django_dev.priority=2"
+      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.django.priority=100"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react_dev:
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
     environment:
-      - REACT_APP_API_URL=http://dev.gryumova.ru
-    command: sh -c "npm start"
+      - REACT_APP_API_URL=http://dev.c0d2aa9fd631.vps.myjino.ru
     networks:
       - web
+      - default
+    command: sh -c "npm start"
+    depends_on:
+      - traefik_dev
     expose:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)" # Ваш домен
-      - "traefik.http.routers.react_dev.priority=1"
+      - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`)"
+      - "traefik.http.routers.react_dev.priority=50"
       - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
   # django:
   #   build:
@@ -127,3 +130,5 @@ services:
 networks:
   web:
     external: true
+  default:
+    internal: true
