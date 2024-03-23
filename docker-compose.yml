@@ -3,7 +3,7 @@ version: '3.8'
 services:
   react_dev:
     build:
-      context: ../frontend
+      context: ./frontend
       dockerfile: Dockerfile
     environment:
       - REACT_APP_API_URL=https://gryumova.dev
