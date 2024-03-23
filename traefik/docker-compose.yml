@@ -11,22 +11,6 @@ services:
       - "80:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  react_dev:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    environment:
-      - REACT_APP_API_URL=http://dev.c0d2aa9fd631.vps.myjino.ru
-    command: sh -c "npm start"
-    depends_on:
-      - traefik_dev
-    expose:
-      - "3000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.react_dev.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) || Host(`gryumova.ru`)" # Ваш домен
-      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
-      - "traefik.http.routers.react_dev.priority=1"
   psql:
     image: postgres
     container_name: psql
@@ -74,9 +58,25 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.django.priority=100"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
-      - "traefik.http.routers.django.priority=3"
+  react_dev:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    environment:
+      - REACT_APP_API_URL=http://dev.c0d2aa9fd631.vps.myjino.ru
+    command: sh -c "npm start"
+    depends_on:
+      - traefik_dev
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)"
+      - "traefik.http.routers.react_dev.priority=1"
+      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
 
 networks:
   web:

@@ -48,9 +48,9 @@ services:
       - "8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
+      - "traefik.http.routers.djadjango_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)" 
+      - "traefik.http.routers.django_dev.priority=2"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
-      - "traefik.http.routers.django.priority=2"
   react_dev:
     build:
       context: ./frontend
@@ -65,8 +65,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)" # Ваш домен
-      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
       - "traefik.http.routers.react_dev.priority=1"
+      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
   # django:
   #   build:
   #     context: ./backend
