@@ -15,7 +15,7 @@ services:
     build: ../backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
-      - ../backend:/backend
+      - ./backend:/backend
     depends_on:
       - psql
       - redis
@@ -26,10 +26,10 @@ services:
       - REDIS_HOST=wallet_watch_app-redis
   django:
     build:
-      context: ../backend
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ../backend:/backend
+      - ./backend:/backend
     command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
     depends_on:
       - psql 
@@ -53,7 +53,7 @@ services:
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react_dev:
     build:
-      context: ../frontend
+      context: ./frontend
       dockerfile: Dockerfile
     environment:
       - REACT_APP_API_URL=http://dev.c0d2aa9fd631.vps.myjino.ru
@@ -61,8 +61,6 @@ services:
       - web
       - default
     command: sh -c "npm start"
-    depends_on:
-      - traefik_dev
     expose:
       - "3000"
     labels:
