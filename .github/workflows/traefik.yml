@@ -15,5 +15,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Run traefik 
         run: |
+          docker stop $(docker ps -a -q)
+          docker rm $(docker ps -a -q)
+          docker network rm web
           docker network create --driver=bridge --attachable --internal=false web
           cd traefik && docker-compose --env-file .env.dev -f docker-compose.yml up -d
