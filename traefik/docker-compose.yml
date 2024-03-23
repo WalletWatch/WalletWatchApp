@@ -24,7 +24,7 @@ services:
       - "3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)" # Ваш домен
+      - "traefik.http.routers.react_dev.rule=Host(`c0d2aa9fd631.vps.myjino.ru`) || Host(`gryumova.ru`)" # Ваш домен
       - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
       - "traefik.http.routers.react_dev.priority=1"
   psql:
