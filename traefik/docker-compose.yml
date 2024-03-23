@@ -59,7 +59,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.django.priority=100"
+      - "traefik.http.routers.django.priority=50"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
   react_dev:
     build:
@@ -75,7 +75,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)"
-      - "traefik.http.routers.react_dev.priority=1"
+      - "traefik.http.routers.react_dev.priority=100"
       - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
 
 networks:
