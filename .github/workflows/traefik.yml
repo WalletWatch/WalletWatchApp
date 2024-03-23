@@ -17,4 +17,4 @@ jobs:
         run: |
           docker network create --driver=bridge --attachable --internal=false web
           cd traefik && docker-compose -f docker-compose.yml up -d
-          docker-compose -f docker-compose.yml up -d 
+          docker-compose -f /root/actions-runner/_work/wallet_watch_app/wallet_watch_app/docker-compose.yml up -d 
