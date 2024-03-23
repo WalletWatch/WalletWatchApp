@@ -76,7 +76,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.django.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru` ) || Host(`dev.gryumova.ru`) && PathPrefix(`/api`)" # Ваш домен
       - "traefik.http.services.django.loadbalancer.server.port=8000"
-      - "traefik.http.routers.django.priority=1"
+      - "traefik.http.routers.django.priority=3"
 
 networks:
   web:
