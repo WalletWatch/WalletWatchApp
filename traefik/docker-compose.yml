@@ -1,39 +1,31 @@
-version: "3"
+version: '3.8'
 
 services:
-  traefik:
-    image: "traefik:v2.9"
-    container_name: "traefik"
+  traefik_dev:
+    image: traefik:v2.5
     command:
-      - "--api.dashboard=true"
-      - "--log.level=INFO"
-      - "--accesslog=true"
+      - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.mydashboard.rule=Host(`c0d2aa9fd631.vps.myjino.ru`)
-      - traefik.http.routers.mydashboard.service=api@internal
     ports:
       - "80:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    networks:
-      - default
-    restart: always
+  react_dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file: .env.dev 
+    command: sh -c "npm start"
+    depends_on:
+      - traefik_dev
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react_dev.rule=Host(`dev.c0d2aa9fd631.vps.myjino.ru`) || Host(`dev.gryumova.ru`)" # Ваш домен
+      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
 
 networks:
-  default:
-    external:
-      name: gateway
-
-volumes:
-  letsencrypt:
-
-# docker network create traefik_webgateway
-
-# docker network create \
-#   --driver=bridge \
-#   --attachable \
-#   --internal=false \
-#   gateway
+  web:
+    external: true
