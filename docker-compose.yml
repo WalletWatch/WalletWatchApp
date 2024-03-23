@@ -8,8 +8,6 @@ services:
     environment:
       - REACT_APP_API_URL=https://gryumova.dev
     command: sh -c "npm start"
-    depends_on:
-      - traefik_dev
     networks:
       - web
     expose:
