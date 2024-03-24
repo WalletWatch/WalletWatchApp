@@ -27,10 +27,11 @@ services:
   celery: 
     environment:
       - REDIS_HOST=prod_redis
-      - POSTGRES_HOST=prod_psql
-      - POSTGRES_USER=liza
-      - POSTGRES_PASSWORD=2608
-      - POSTGRES_DB=wallet
+      - PSQL_NAME=wallet
+      - PSQL_USER=liza
+      - PSQL_PASSWORD=2608
+      - PSQL_HOST=prod_psql
+      - PSQL_PORT=5432
     depends_on:
       - psql
       - django

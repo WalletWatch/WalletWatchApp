@@ -37,14 +37,13 @@ CHANNEL_LAYERS = {
 }
 
 HOST_REDIS = os.environ.get("REDIS_HOST", "localhost")
-HOST_PG = os.environ.get("POSTGRES_HOST", "localhost")
-USER_PG = os.environ.get("POSTGRES_USER", "postgres")
-PW_PG = os.environ.get("POSTGRES_PASSWORD", "2608")
-DB_PG = os.environ.get("POSTGRES_DB", "wallet")
+HOST_PG = os.environ.get("PSQL_HOST", "localhost")
+USER_PG = os.environ.get("PSQL_USER", "postgres")
+PW_PG = os.environ.get("PSQL_PASSWORD", "2608")
+DB_PG = os.environ.get("PSQL_NAME", "wallet")
 
 CELERY_BROKER_URL = "redis://" + HOST_REDIS + ":6379"
-CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_RESULT_BACKEND = f'db+postgresql://{USER_PG}:{PW_PG}@{HOST_PG}:5432/{DB_PG}'
+CELERY_RESULT_BACKEND = f'db+postgresql://{USER_PG}:{PW_PG}@{HOST_PG}:5432/{DB_PG}'
 CELERY_IMPORTS = ("wallet.tasks",)
 
 

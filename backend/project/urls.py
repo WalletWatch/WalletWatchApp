@@ -7,7 +7,7 @@ from os import environ
 from wallet import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("api/admin/", admin.site.urls),
     path("api/wallet/", views.wallet_list),
     path("api/balance/", views.balance_list),
     path("api/balance/<int:pk>/", views.balance_detail),
