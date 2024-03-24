@@ -12,6 +12,7 @@ services:
   celery: 
     environment:
       - REDIS_HOST=prod_redis
+      - POSTGRES_HOST=prod_psql
   django:
     environment:
       - REDIS_HOST=prod_redis
