@@ -6,7 +6,7 @@ services:
     container_name: psql
   redis:
     image: redis:latest
-    container_name: wallet_watch_app-redis
+    container_name: wallet_watch_app-redis-prod
   celery:
     build: ./backend
     command: celery -A project worker --loglevel=info --beat
@@ -19,7 +19,7 @@ services:
     expose:
       - "8001"
     environment:
-      - REDIS_HOST=wallet_watch_app-redis
+      - REDIS_HOST=wallet_watch_app-redis-prod
   django:
     build:
       context: ./backend

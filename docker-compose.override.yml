@@ -8,7 +8,7 @@ services:
       - POSTGRES_PASSWORD=2608
   django:
     environment:
-      - REDIS_HOST=wallet_watch_app-redis 
+      - REDIS_HOST=wallet_watch_app-redis-prod
       - PSQL_NAME=wallet_test
       - PSQL_USER=liza
       - PSQL_PASSWORD=2608

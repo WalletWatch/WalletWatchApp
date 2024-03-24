@@ -28,11 +28,11 @@ jobs:
     steps:
     
     - name: Deploy to production
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/traefik'
       run: |
-        docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
     - name: Deploy to development
-      if: github.ref == 'refs/heads/traefik'
+      if: github.ref == 'refs/heads/main'
       run: |
         docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
