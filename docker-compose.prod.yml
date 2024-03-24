@@ -9,16 +9,6 @@ services:
       - POSTGRES_PASSWORD=2608
   redis:
     container_name: prod_redis
-  celery: 
-    environment:
-      - REDIS_HOST=prod_redis
-      - POSTGRES_HOST=prod_psql
-      - POSTGRES_USER=liza
-      - POSTGRES_PASSWORD=2608
-      - POSTGRES_DB=wallet
-    depends_on:
-      - prod_django
-      - prod_psql
   django:
     container_name: prod_django
     environment:
@@ -39,6 +29,16 @@ services:
       # - "traefik.http.routers.django.priority=3"
       # - "traefik.http.routers.django-ws.service=django"
       # - "traefik.http.services.django.loadbalancer.server.port=8000"
+  celery: 
+    environment:
+      - REDIS_HOST=prod_redis
+      - POSTGRES_HOST=prod_psql
+      - POSTGRES_USER=liza
+      - POSTGRES_PASSWORD=2608
+      - POSTGRES_DB=wallet
+    depends_on:
+      - prod_django
+      - prod_psql
   react:
     environment:
       - REACT_APP_API_URL=https://gryumova.ru
