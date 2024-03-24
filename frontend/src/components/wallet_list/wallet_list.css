@@ -16,7 +16,9 @@
 }
 
 .wallet_list_title {
-    font-family: "Fragment Mono", monospace;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
+                Ubuntu, Cantarell, "Helvetica Neue",  sans-serif, "Apple Color Emoji",
+                "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 12px;
     font-weight: 500;
     font-style: normal;
