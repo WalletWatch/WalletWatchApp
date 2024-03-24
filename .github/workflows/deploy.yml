@@ -14,11 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Stop and remove containers, networks prod
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/traefik'
         run: |
           docker-compose -p prod -f docker-compose.yml -f docker-compose.prod.yml down
       - name: Stop and remove containers, networks
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/traefik'
         run: |
           docker-compose -p dev -f docker-compose.yml -f docker-compose.override.yml down
 
