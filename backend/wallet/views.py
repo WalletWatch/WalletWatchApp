@@ -39,6 +39,7 @@ def balance_list(request):
         asset_name = get_token_symbol(asset_address, network_id)
         balance = get_balance(wallet.wallet_address, asset_address, network_id)
         price = get_token_price(asset_name)
+        print(asset_name, balance, price)
 
         if (balance is None or price is None or asset_name is None):
             return Response(status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
