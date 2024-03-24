@@ -8,7 +8,7 @@ services:
     image: redis:latest
     container_name: wallet_watch_app-redis
   celery:
-    build: ../backend
+    build: ./backend
     command: celery -A project worker --loglevel=info --beat
     volumes:
       - ./backend:/backend
