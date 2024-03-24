@@ -14,10 +14,10 @@ def realtime_task():
     balance = Balance.objects.select_related('wallet_id', 'network_id').all()
     for row in balance.iterator():
         logger.info(row)
-
+        
         new_balance = get_balance(row.wallet_id.wallet_address, row.asset_address, row.network_id.id)
         new_price = get_token_price(row.asset)
-        logger.info(new_balance, new_price)
+        logger.info(f"Новый баланс: {new_balance}, Новая цена: {new_price}")
 
         if (row.balance != new_balance or row.price != new_price):
             row.balance = new_balance
