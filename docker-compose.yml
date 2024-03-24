@@ -3,10 +3,8 @@ version: '3.8'
 services:
   psql:
     image: postgres
-    container_name: psql
   redis:
     image: redis:latest
-    container_name: wallet_watch_app-redis-prod
   celery:
     build: ./backend
     command: celery -A project worker --loglevel=info --beat
@@ -18,8 +16,6 @@ services:
       - django
     expose:
       - "8001"
-    environment:
-      - REDIS_HOST=wallet_watch_app-redis-prod
   django:
     build:
       context: ./backend
@@ -35,7 +31,7 @@ services:
       - default
     expose:
       - "8000"
-  react_dev:
+  react:
     build:
       context: ./frontend
       dockerfile: Dockerfile
