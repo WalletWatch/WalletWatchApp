@@ -27,10 +27,10 @@ services:
       - "traefik.http.services.django-prod.loadbalancer.server.port=8000"
       - "traefik.docker.network=web"
 
-      - "traefik.http.routers.django-ws.rule=Host(`gryumova.ru`) && PathPrefix(`/ws`)"
-      - "traefik.http.routers.django.priority=3"
-      - "traefik.http.routers.django-ws.service=django"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      # - "traefik.http.routers.django-ws.rule=Host(`gryumova.ru`) && PathPrefix(`/ws`)"
+      # - "traefik.http.routers.django.priority=3"
+      # - "traefik.http.routers.django-ws.service=django"
+      # - "traefik.http.services.django.loadbalancer.server.port=8000"
   react:
     environment:
       - REACT_APP_API_URL=https://gryumova.ru
