@@ -31,15 +31,19 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(os.environ.get("REDIS_HOST", "wallet_watch_app-redis"), 6379)],
+            "hosts": [(os.environ.get("REDIS_HOST", "localhost"), 6379)],
         },
     }
 }
 
-HOST_REDIS = os.environ.get("REDIS_HOST", "wallet_watch_app-redis")
+HOST_REDIS = os.environ.get("REDIS_HOST", "localhost")
+HOST_PG = os.environ.get("POSTGRES_HOST", "localhost")
+USER_PG = os.environ.get("POSTGRES_USER", "postgres")
+PW_PG = os.environ.get("POSTGRES_PASSWORD", "2608")
+DB_PG = os.environ.get("POSTGRES_DB", "wallet")
 
 CELERY_BROKER_URL = "redis://" + HOST_REDIS + ":6379"
-CELERY_RESULT_BACKEND = "redis://" + HOST_REDIS+ ":6379"
+CELERY_RESULT_BACKEND = f'db+postgresql://{USER_PG}:{PW_PG}@{HOST_PG}:5432/${DB_PG}'
 CELERY_IMPORTS = ("wallet.tasks",)
 
 

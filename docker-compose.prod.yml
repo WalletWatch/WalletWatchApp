@@ -13,7 +13,14 @@ services:
     environment:
       - REDIS_HOST=prod_redis
       - POSTGRES_HOST=prod_psql
+      - POSTGRES_USER=liza
+      - POSTGRES_PASSWORD=2608
+      - POSTGRES_DB=wallet
+    depends_on:
+      - prod_django
+      - prod_psql
   django:
+    container_name: prod_django
     environment:
       - REDIS_HOST=prod_redis
       - PSQL_NAME=wallet
