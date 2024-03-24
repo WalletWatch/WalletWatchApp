@@ -22,9 +22,9 @@ services:
       - PSQL_PORT=5432
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`gryumova.ru`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.django.priority=100"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - "traefik.http.routers.django-prod.rule=Host(`gryumova.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.django-prod.priority=75"
+      - "traefik.http.services.django-prod.loadbalancer.server.port=8000"
       - "traefik.docker.network=web"
 
       # - "traefik.http.routers.django-ws.rule=Host(`gryumova.ru`) && PathPrefix(`/ws`)"
@@ -36,9 +36,9 @@ services:
       - REACT_APP_API_URL=https://gryumova.ru
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`gryumova.ru`)"
-      - "traefik.http.routers.react.priority=50"
-      - "traefik.http.services.react.loadbalancer.server.port=3000"
+      - "traefik.http.routers.react-prod.rule=Host(`gryumova.ru`)"
+      - "traefik.http.routers.react-prod.priority=25"
+      - "traefik.http.services.react-prod.loadbalancer.server.port=3000"
       - "traefik.docker.network=web"
 
 networks:

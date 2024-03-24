@@ -16,11 +16,11 @@ jobs:
       - name: Stop and remove containers, networks prod
         if: github.ref == 'refs/heads/traefik'
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+          docker-compose -p prod -f docker-compose.yml -f docker-compose.prod.yml down
       - name: Stop and remove containers, networks
         if: github.ref == 'refs/heads/traefik'
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.override.yml down
+          # docker-compose -p prod -f docker-compose.yml -f docker-compose.override.yml down
 
   deploy:
     runs-on: self-hosted
