@@ -127,6 +127,10 @@ function TokenForm() {
     }, []);
 
     useEffect(() => {
+
+    }, [submitting])
+
+    useEffect(() => {
         if (Object.keys(errors).length === 0 && submitting) {
           finishSubmit();
         }
@@ -151,6 +155,9 @@ function TokenForm() {
 
     const handleClickButton = (e:any) => {
         e.preventDefault();
+        if (submitting) return ;
+
+        console.log("submit", submitting)
         setErrors(validateWallet(token));
 
         setSubmitting(true);
@@ -164,12 +171,10 @@ function TokenForm() {
 
         createBalance(newToken)
             .then((result) => dispatch(addToken(result)))
-            .then(() => { setShow(false); setToken({address:"", wallet: null, network: null});})
+            .then(() => { setShow(false); setToken({address:"", wallet: null, network: null}); setSubmitting(false);})
             .catch((err) => {
                 setErrors({address:err.response.data})
             });
-        
-        setSubmitting(false);
     }
 
     const clickShowButton = () => {

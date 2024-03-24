@@ -9,9 +9,6 @@ services:
       - POSTGRES_PASSWORD=2608
   redis:
     container_name: dev_redis
-  celery: 
-    environment:
-      - REDIS_HOST=dev_redis
   django:
     environment:
       - REDIS_HOST=dev_redis
@@ -26,11 +23,16 @@ services:
       - "traefik.http.routers.django-dev.priority=100"
       - "traefik.http.services.django-dev.loadbalancer.server.port=8000"
       - "traefik.docker.network=web"
-
-      # - "traefik.http.routers.django-ws.rule=Host(`dev.gryumova.ru`) && PathPrefix(`/ws`)"
-      # - "traefik.http.routers.django.priority=3"
-      # - "traefik.http.routers.django-ws.service=django"
-      # - "traefik.http.services.django.loadbalancer.server.port=8000"
+  celery: 
+    environment:
+      - REDIS_HOST=dev_redis
+      - POSTGRES_HOST=dev_psql
+      - POSTGRES_USER=liza
+      - POSTGRES_PASSWORD=2608
+      - POSTGRES_DB=wallet_test
+    depends_on:
+      - psql
+      - django
   react:
     environment:
       - REACT_APP_API_URL=https://dev.gryumova.ru

@@ -63,6 +63,8 @@ function WalletForm() {
 
     const handleClickButton = (e:any) => {
         e.preventDefault();
+
+        if (submitting) return;
         setErrors(validateWallet(wallet));
 
         setSubmitting(true);
@@ -75,7 +77,11 @@ function WalletForm() {
 
         createWallet(newWalet)
         .then(data => dispatch(addWallet(data)))
-        .then(() => setShow(false))
+        .then(() => {
+                setShow(false);
+                setWallet({name:"", address:""});
+                setSubmitting(false);
+        })
         .catch((errors) => {
             errors.response.data.wallet_address ? setErrors({
                 address: errors.response.data.wallet_address[0]
@@ -85,9 +91,6 @@ function WalletForm() {
                 address: errors.response.data
             })
         });
-
-        setWallet({name:"", address:""});
-        setSubmitting(false);
     }
 
     const clickShowButton = () => {
