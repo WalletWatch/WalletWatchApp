@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  psql:
+    environment:
+      - POSTGRES_DB=wallet_test
+      - POSTGRES_USER=liza
+      - POSTGRES_PASSWORD=2608
+  django:
+    environment:
+      - REDIS_HOST=wallet_watch_app-redis 
+      - PSQL_NAME=wallet_test
+      - PSQL_USER=liza
+      - PSQL_PASSWORD=2608
+      - PSQL_HOST=psql
+      - PSQL_PORT=5432
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host(`dev.gryumova.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.django.priority=100"
+      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - "traefik.docker.network=web"
+
+      # - "traefik.http.routers.django-ws.rule=Host(`dev.gryumova.ru`) && PathPrefix(`/ws`)"
+      # - "traefik.http.routers.django.priority=3"
+      # - "traefik.http.routers.django-ws.service=django"
+      # - "traefik.http.services.django.loadbalancer.server.port=8000"
+  react_dev:
+    environment:
+      - REACT_APP_API_URL=https://dev.gryumova.ru
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react_dev.rule=Host(`dev.gryumova.ru`)"
+      - "traefik.http.routers.react_dev.priority=50"
+      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
+      - "traefik.docker.network=web"
+
+networks:
+  web:
+    external: true
+  default:
+    internal: true

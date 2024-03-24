@@ -4,10 +4,6 @@ services:
   psql:
     image: postgres
     container_name: psql
-    environment:
-      - POSTGRES_DB=${PSQL_NAME}
-      - POSTGRES_USER=${PSQL_USER}
-      - POSTGRES_PASSWORD=${PSQL_PASSWORD}
   redis:
     image: redis:latest
     container_name: wallet_watch_app-redis
@@ -37,94 +33,17 @@ services:
     networks:
       - web
       - default
-    environment:
-      - REDIS_HOST=wallet_watch_app-redis 
-      - PSQL_NAME=${PSQL_NAME}
-      - PSQL_USER=${PSQL_USER}
-      - PSQL_PASSWORD=${PSQL_PASSWORD}
-      - PSQL_HOST=psql
-      - PSQL_PORT=${PSQL_PORT}
     expose:
       - "8000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`dev.gryumova.ru`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.django.priority=100"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
-      - "traefik.docker.network=web"
   react_dev:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    environment:
-      - REACT_APP_API_URL=https://dev.gryumova.ru
     networks:
       - web
     command: sh -c "npm start"
     expose:
       - "3000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.react_dev.rule=Host(`dev.gryumova.ru`)"
-      - "traefik.http.routers.react_dev.priority=50"
-      - "traefik.http.services.react_dev.loadbalancer.server.port=3000"
-      - "traefik.docker.network=web"
-  # django:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./backend:/backend
-  #   command: bash -c "python manage.py clear_cache && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 project.asgi:application"
-  #   depends_on:
-  #     - psql 
-  #     - redis
-  #   networks:
-  #     - default
-  #     - dev1
-  #   environment:
-  #     - REDIS_HOST=wallet_watch_app-redis 
-  #     - PSQL_NAME=${PSQL_NAME}
-  #     - PSQL_USER=${PSQL_USER}
-  #     - PSQL_PASSWORD=${PSQL_PASSWORD}
-  #     - PSQL_HOST=psql
-  #     - PSQL_PORT=${PSQL_PORT}
-  #   expose:
-  #     - "8000"
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.django.rule=Host(`${WALLET_HOST_NAME}` ) || Host(`${WALLET_DOMAIN}`) && PathPrefix(`/api`)" # Ваш домен
-  #     - "traefik.http.services.django.loadbalancer.server.port=8000"
-  #     - "traefik.http.routers.django.entrypoints=websecure"
-  #     - "traefik.http.routers.django.tls=true"
-  #     - "traefik.http.routers.django.priority=2"
-  #     - "traefik.docker.network=traefik_webgateway"
-  #     # Маршрут для WebSocket
-  #     # - "traefik.http.routers.django-ws.rule=Host(`${WALLET_HOST_NAME}`) && PathPrefix(`/ws`)"
-  #     # - "traefik.http.routers.django.priority=3"
-  #     # - "traefik.http.routers.django-ws.service=django"
-  #     # - "traefik.http.services.django.loadbalancer.server.port=8000"
-  # react:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - REACT_APP_API_URL=${REACT_APP_API_URL}
-  #   networks:
-  #     - default
-  #     - dev1
-  #   command: sh -c "npm start"
-  #   expose:
-  #     - "3000"
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.react.rule=Host(`${WALLET_HOST_NAME}`) || Host(`${WALLET_DOMAIN}`)" # Ваш домен
-  #     - "traefik.http.services.react.loadbalancer.server.port=3000"
-  #     - "traefik.http.routers.react.entrypoints=websecure"
-  #     - "traefik.http.routers.react.tls=true"
-  #     - "traefik.http.routers.react.priority=1"
-  #     - "traefik.docker.network=traefik_webgateway"
-
 
 networks:
   web:
