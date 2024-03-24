@@ -14,7 +14,7 @@ def get_balance(wallet_adress, token_adress, network_id):
     network = Network.objects.get(id=network_id)
 
     web3 = Web3(Web3.HTTPProvider(network.network_url))
-    print(network, web3.is_connected())
+    print(network, network.network_url, web3.is_connected())
     if web3.is_connected():
         try:
             contract = web3.eth.contract(token_adress, abi=network.network_ABI)
