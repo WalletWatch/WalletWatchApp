@@ -37,8 +37,8 @@ services:
       - POSTGRES_PASSWORD=2608
       - POSTGRES_DB=wallet
     depends_on:
-      - prod_django
-      - prod_psql
+      - psql
+      - django
   react:
     environment:
       - REACT_APP_API_URL=https://gryumova.ru
