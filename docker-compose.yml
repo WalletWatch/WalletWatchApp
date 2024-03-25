@@ -16,6 +16,9 @@ services:
       - django
     expose:
       - "8001"
+    networks:
+      - web
+      - default
   django:
     build:
       context: ./backend
