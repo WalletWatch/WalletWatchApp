@@ -43,4 +43,5 @@ services:
       - "traefik.http.routers.react-prod.rule=Host(`gryumova.ru`)"
       - "traefik.http.routers.react-prod.priority=25"
       - "traefik.http.services.react-prod.loadbalancer.server.port=3000"
+      - "traefik.http.services.react-prod.loadBalancer.sticky=true" 
       - "traefik.docker.network=web"
