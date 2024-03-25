@@ -13,12 +13,11 @@ INFURA_URL = 'https://mainnet.infura.io/v3/3c7ba8ecf29b439ab0cb11ddc4b70989'
 
 @shared_task(name="realtime_task")
 def realtime_task():
-    logger.info(Web3(Web3.HTTPProvider(INFURA_URL)))
+    logger.info("Web3 connection: ", Web3(Web3.HTTPProvider(INFURA_URL)), Web3(Web3.HTTPProvider(INFURA_URL)).is_connected())
 
     balance = Balance.objects.select_related('wallet_id', 'network_id').all()
     for row in balance.iterator():
-        logger.info(row)
-        
+                
         new_balance = get_balance(row.wallet_id.wallet_address, row.asset_address, row.network_id.id)
         new_price = get_token_price(row.asset)
         logger.info(f"Новый баланс: {new_balance}, Новая цена: {new_price}")

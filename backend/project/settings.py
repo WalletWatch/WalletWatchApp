@@ -44,7 +44,6 @@ DB_PG = os.environ.get("PSQL_NAME", "wallet")
 
 CELERY_BROKER_URL = "redis://" + HOST_REDIS + ":6379"
 CELERY_RESULT_BACKEND = "redis://" + HOST_REDIS + ":6379"
-# CELERY_RESULT_BACKEND = f'db+postgresql://{USER_PG}:{PW_PG}@{HOST_PG}:5432/{DB_PG}'
 CELERY_IMPORTS = ("wallet.tasks",)
 
 
