@@ -20,7 +20,7 @@ services:
       - PSQL_PORT=5432
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django-prod.rule=Host(`gryumova.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.django-prod.rule=Host(`gryumova.ru`) && (PathPrefix(`/api`) || PathPrefix(`/ws`))"
       - "traefik.http.routers.django-prod.priority=75"
       - "traefik.http.services.django-prod.loadbalancer.server.port=8000"
       - "traefik.docker.network=web"
