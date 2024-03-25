@@ -1,3 +1,4 @@
+from web3 import Web3
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from asgiref.sync import async_to_sync
@@ -8,9 +9,13 @@ from .models import Balance
 from .request import get_balance, get_token_price
 
 logger = get_task_logger(__name__)
+INFURA_URL = 'https://mainnet.infura.io/v3/3c7ba8ecf29b439ab0cb11ddc4b70989'
 
 @shared_task(name="realtime_task")
 def realtime_task():
+    web3 = Web3(Web3.HTTPProvider(INFURA_URL))
+    logger.info(web3.is_connected())
+
     balance = Balance.objects.select_related('wallet_id', 'network_id').all()
     for row in balance.iterator():
         logger.info(row)
