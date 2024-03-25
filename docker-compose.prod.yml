@@ -23,6 +23,10 @@ services:
       - "traefik.http.routers.django-prod.rule=Host(`gryumova.ru`) && PathPrefix(`/api`)"
       - "traefik.http.routers.django-prod.priority=75"
       - "traefik.http.services.django-prod.loadbalancer.server.port=8000"
+      
+      - "traefik.http.routers.django-prod-ws.rule=Host(`gryumova.ru`) && Path(`/ws`)" 
+      - "traefik.http.routers.django-prod-ws.priority=50"
+      - "traefik.http.services.django-prod-ws.loadbalancer.server.port=8000" 
       - "traefik.docker.network=web"
   celery: 
     environment:
