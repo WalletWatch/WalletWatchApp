@@ -78,5 +78,3 @@ def get_token_price(symbol):
         return data['data'][0]['quote']['USDT']['price']
     except:
         return None
-
-    return None
