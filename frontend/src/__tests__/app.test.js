@@ -1,8 +1,6 @@
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 import { useDispatch } from 'react-redux';
-import { fetchBalance } from '../http/balance_api.ts';
-import { fetchWallet } from '../http/wallet_api.ts';
 import App from '../App.tsx';
 
 import Adapter from 'enzyme-adapter-react-16';
