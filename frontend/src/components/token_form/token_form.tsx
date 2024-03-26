@@ -1,6 +1,6 @@
 /* eslint-disable */
 import "./token_form.css";
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
 import { createBalance } from "../../http/balance_api.ts";
@@ -157,7 +157,6 @@ function TokenForm() {
         e.preventDefault();
         if (submitting) return ;
 
-        console.log("submit", submitting)
         setErrors(validateWallet(token));
 
         setSubmitting(true);
@@ -173,7 +172,8 @@ function TokenForm() {
             .then((result) => dispatch(addToken(result)))
             .then(() => { setShow(false); setToken({address:"", wallet: null, network: null}); setSubmitting(false);})
             .catch((err) => {
-                setErrors({address:err.response.data})
+                setErrors({address:err.response.data});
+                setSubmitting(false);
             });
     }
 
@@ -242,7 +242,7 @@ function TokenForm() {
 
                 <button 
                     className="wallet_button"
-                    style={{marginTop: "10px"}}
+                    style={{marginTop: "10px", cursor: submitting?"not-allowed":"pointer"}}
                     onClick={handleClickButton}
                 >
                     Add new wallet

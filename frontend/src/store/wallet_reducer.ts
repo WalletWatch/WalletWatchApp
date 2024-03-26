@@ -10,7 +10,9 @@ type Wallet = {
 const addWallet = createAction<Wallet>('ADD_WALLET')
 const removeWallet = createAction<number>('REMOVE_WALLET')
 
-const walletReducer = createReducer(await fetchWallet(), (builder) => {
+const initialState = await fetchWallet()
+
+const walletReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(addWallet, (state, action) => {
             return [...state, action.payload];
