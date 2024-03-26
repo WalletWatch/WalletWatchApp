@@ -8,6 +8,7 @@ import Select from "react-select";
 import { addToken } from "../../store/actions.ts";
 import { RootState } from "../../store/store.ts";
 import { fetchNetwork } from "../../http/network.ts";
+import { IsAny } from "@reduxjs/toolkit/dist/tsHelpers";
 
 type TokenFormType = {
     address: string,
@@ -33,6 +34,11 @@ type Error = {
     wallet?: string, 
     network?: string
 }
+type Option = {
+    value: number,
+    label: string,
+    color: string
+}
 
 function TokenForm() {
     const dispatch = useDispatch();
@@ -42,8 +48,8 @@ function TokenForm() {
     const [errors, setErrors] = useState<Error>({});
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [show, setShow] = useState<boolean>(false);
-    const [walletOptions, setWalletOptions] = useState([]);
-    const [networkOptions, setNetworkOptions] = useState([]);
+    const [walletOptions, setWalletOptions] = useState<Option[]>([]);
+    const [networkOptions, setNetworkOptions] = useState<Option[]>([]);
 
     
     const styles = {
@@ -91,7 +97,7 @@ function TokenForm() {
     };
 
     useEffect(() => {
-        let wopt = []
+        let wopt:Option[] = [];
 
         wopt = wallets.map((item:Wallet) =>{
             return {value: item.id, label: item.wallet_name, color: "black"}
@@ -99,7 +105,7 @@ function TokenForm() {
         setWalletOptions(wopt);
 
         fetchNetwork().then(data => {
-            let nopt = [];
+            let nopt:Option[] = [];
             nopt = data.map((item:Network) =>{
                 return {value: item.id, label: item.network, color: "black"}
             })
@@ -245,7 +251,7 @@ function TokenForm() {
                     style={{marginTop: "10px", cursor: submitting?"not-allowed":"pointer"}}
                     onClick={handleClickButton}
                 >
-                    Add new wallet
+                    Add new token
                 </button>
             </form>
         </div>

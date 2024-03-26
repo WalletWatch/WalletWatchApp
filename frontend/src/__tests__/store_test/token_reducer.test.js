@@ -1,16 +1,16 @@
-import { addToken, removeToken, updateToken, updateAllToken } from '../../store/actions.ts';
-import tokenReducer from "../../store/token_reducer.ts"
-import { fetchBalance } from '../../http/balance_api.ts';
+import tokenReducer from '../../store/token_reducer.ts';
+import { addToken, removeToken, updateToken, updateAllToken } from "../../store/actions.ts";
+import {fetchBalance} from "../../http/balance_api.ts";
 
 describe('tokenReducer', () => {
-    it('should return the initial state', () => {
-        const initialState = []; 
-        const state = tokenReducer(undefined, { type: 'unknown' });
+    it('should return the initial state', async () => {
+        const initialState = await fetchBalance(); // Получите начальное состояние с помощью fetchBalance
+        const state = tokenReducer(initialState, { type: 'unknown' });
         expect(state).toEqual(initialState);
     });
 
     it('should handle ADD_TOKEN', () => {
-        const initialState = []; 
+        const initialState = []; // начальное состояние пустое
         const token = { id: 1, wallet_name: 'Test Wallet', asset: 'BTC', balance: 10 };
         const action = addToken(token);
         const state = tokenReducer(initialState, action);
@@ -19,7 +19,7 @@ describe('tokenReducer', () => {
 
     it('should handle REMOVE_TOKEN', () => {
         const initialState = [{ id: 1, wallet_name: 'Test Wallet', asset: 'BTC', balance: 10 }];
-        const action = removeToken(1); 
+        const action = removeToken(1); // удаляем токен с id 1
         const state = tokenReducer(initialState, action);
         expect(state).toEqual([]);
     });
