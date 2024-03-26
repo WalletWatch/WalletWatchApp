@@ -23,7 +23,8 @@ type Token = {
     wallet_name: string;
     asset: string;
     asset_address: string;
-    network: string;
+    network_name: string;
+    network: number;
     balance: number;
     price: number;
     updated: string;
@@ -33,7 +34,7 @@ type Token = {
 
 function TokenTable() {
     const dispatch = useDispatch();
-    const balance = useSelector((state: RootState) => state.token);
+    const balance:Token[] = useSelector((state: RootState) => state.token);
     const [rowData, setRowData] = useState<Token[]>(balance);
 
     const columnDefs = [

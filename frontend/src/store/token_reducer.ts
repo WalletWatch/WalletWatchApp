@@ -1,13 +1,12 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { fetchBalance } from "../http/balance_api.ts";
-import {useState} from 'react';
 
 type Token = {
     id: number;
     wallet_name: string;
     asset: string;
     asset_address: string;
-    network: string;
+    network_name: string;
+    network: number;
     balance: number;
     price: number;
     updated: string;
@@ -21,7 +20,7 @@ const removeToken = createAction<number>('REMOVE_TOKEN')
 const updateToken = createAction<Token>('UPDATE_TOKEN')
 const updateAllToken = createAction<Token[]>('UPDATE_ALL_TOKEN')
 
-const initialState = await fetchBalance();
+let initialState: Token[] = [];
 
 const tokenReducer = createReducer(initialState, (builder) => {
     builder

@@ -1,5 +1,4 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { fetchWallet } from "../http/wallet_api.ts";
 
 type Wallet = {
     id: number;
@@ -9,13 +8,17 @@ type Wallet = {
 
 const addWallet = createAction<Wallet>('ADD_WALLET')
 const removeWallet = createAction<number>('REMOVE_WALLET')
+const updateWallet = createAction<Wallet[]>('UPDATE_WALLET')
 
-const initialState = await fetchWallet()
+let initialState: Wallet[] = [];
 
 const walletReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(addWallet, (state, action) => {
             return [...state, action.payload];
+        })
+        .addCase(updateWallet, (state, action) => {
+            return action.payload;
         })
         .addCase(removeWallet, (state, action) => {
             return state.filter(

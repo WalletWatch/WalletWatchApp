@@ -82,14 +82,12 @@ function WalletForm() {
                 setWallet({name:"", address:""});
                 setSubmitting(false);
         })
-        .catch((errors) => {
-            errors.response.data.wallet_address ? setErrors({
-                address: errors.response.data.wallet_address[0]
-            }): errors.response.data.wallet_name ? setErrors({
-                name: errors.response.data.wallet_name[0]
-            }): setErrors({
-                address: errors.response.data
-            })
+        .catch((err) => {
+            if (err.response) {
+                setErrors({address: err.response.data});
+            } else {
+                console.log("An error occurred:", err.message);
+            }
         });
     }
 

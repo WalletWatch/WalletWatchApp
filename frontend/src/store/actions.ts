@@ -31,6 +31,13 @@ function removeWallet(id: number) {
     };
 }
 
+function updateWallet(wallets: Wallet[]) {
+  return {
+    type: 'UPDATE_WALLET',
+    payload: wallets
+  }
+}
+
 function addToken(token: Token) {
     return {
       type: 'ADD_TOKEN',
@@ -59,4 +66,4 @@ function removeToken(id: number) {
     };
 }
 
-export { addWallet, addToken, removeToken, removeWallet, updateAllToken, updateToken };
+export { addWallet, addToken, removeToken, removeWallet, updateAllToken, updateToken, updateWallet };
