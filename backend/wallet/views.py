@@ -89,13 +89,6 @@ def wallet_detail(request, pk):
         serializer = WalletSerializer(wallet, context={'request': request})
         return Response(serializer.data, headers={'Access-Control-Allow-Origin':'*'})
 
-    elif request.method == 'PUT':
-        serializer = WalletSerializer(wallet, data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, headers={'Access-Control-Allow-Origin':'*'})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
-
     elif request.method == 'DELETE':
         try:
             Balance.objects.get(wallet_id=pk).delete()
@@ -116,13 +109,6 @@ def balance_detail(request, pk):
     if request.method == 'GET':
         serializer = BalanceSerializer(balance,context={'request': request})
         return Response(serializer.data, headers={'Access-Control-Allow-Origin':'*'})
-
-    elif request.method == 'PUT':
-        serializer = BalanceSerializer(balance, data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, headers={'Access-Control-Allow-Origin':'*'})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
 
     elif request.method == 'DELETE':
         balance.delete()
@@ -164,13 +150,6 @@ def network_detail(request, pk):
     if request.method == 'GET':
         serializer = NetworkSerializer(network,context={'request': request})
         return Response(serializer.data, headers={'Access-Control-Allow-Origin':'*'})
-
-    elif request.method == 'PUT':
-        serializer = NetworkSerializer(network, data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, headers={'Access-Control-Allow-Origin':'*'})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
 
     elif request.method == 'DELETE':
         network.delete()

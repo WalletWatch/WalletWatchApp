@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "make_ci" ]
+    branches: [ "traefik" ]
   pull_request:
-    branches: [ "make_ci" ]
+    branches: [ "traefik" ]
 
 jobs:
   backend-tests:

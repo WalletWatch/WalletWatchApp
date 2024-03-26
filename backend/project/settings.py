@@ -4,6 +4,12 @@ from os import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+HOST_REDIS = os.environ.get("REDIS_HOST", "localhost")
+HOST_PG = os.environ.get("PSQL_HOST", "localhost")
+USER_PG = os.environ.get("PSQL_USER", "postgres")
+PW_PG = os.environ.get("PSQL_PASSWORD", "2608")
+DB_PG = os.environ.get("PSQL_NAME", "wallet")
+
 SECRET_KEY = "django-insecure-g972hqw-n)m=oh5kkmc89hl_t342%^5ngp)7@9aq2*oa8u5_fl"
 
 DEBUG = True
@@ -35,12 +41,6 @@ CHANNEL_LAYERS = {
         },
     }
 }
-
-HOST_REDIS = os.environ.get("REDIS_HOST", "localhost")
-HOST_PG = os.environ.get("PSQL_HOST", "localhost")
-USER_PG = os.environ.get("PSQL_USER", "postgres")
-PW_PG = os.environ.get("PSQL_PASSWORD", "2608")
-DB_PG = os.environ.get("PSQL_NAME", "wallet")
 
 CELERY_BROKER_URL = "redis://" + HOST_REDIS + ":6379"
 CELERY_RESULT_BACKEND = "redis://" + HOST_REDIS + ":6379"
@@ -80,11 +80,11 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": environ.get("PSQL_NAME"),
-        "USER": environ.get("PSQL_USER"),
-        "PASSWORD": environ.get("PSQL_PASSWORD"),
-        "HOST": environ.get("PSQL_HOST"),
-        "PORT": environ.get("PSQL_PORT"),
+        "NAME": DB_PG,
+        "USER": USER_PG,
+        "PASSWORD": PW_PG,
+        "HOST": HOST_PG,
+        "PORT": environ.get("PSQL_PORT", 5432),
     }
 }
 

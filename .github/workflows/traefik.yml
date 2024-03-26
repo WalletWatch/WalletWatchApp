@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - docker
-      - traefik
+      # - traefik
 
 jobs:
   traefik:
@@ -17,7 +17,3 @@ jobs:
         run: |
           docker network create --driver=bridge --attachable --internal=false web
           cd traefik && docker-compose -f docker-compose.yml up -d
-
-# docker stop $(docker ps -a -q)
-# docker rm $(docker ps -a -q)
-# docker network rm web

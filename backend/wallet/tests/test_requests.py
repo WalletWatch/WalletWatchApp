@@ -9,26 +9,22 @@ COINMARKET_URL = 'https://pro-api.coinmarketcap.com/v2/tools/price-conversion'
 COINMARKET_APIKEY = "3f7955f4-e74d-4064-b6cb-55cfacf51718"
 
 class WalletTestCase(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        Network.objects.create(network="ERC20", network_url=INFURA_URL, network_ABI=ERC20_ABI)
-
     def test_is_wallet_connected(self):
         self.assertFalse(is_wallet_connected("some wallet")) 
         self.assertTrue(is_wallet_connected("0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97")) 
 
     def test_is_contract_exist(self):
-        self.assertTrue(is_contract_exist('0xdAC17F958D2ee523a2206206994597C13D831ec7', "3"))
-        self.assertFalse(is_contract_exist('some contract address', "3"))
+        self.assertTrue(is_contract_exist('0xdAC17F958D2ee523a2206206994597C13D831ec7', "1"))
+        self.assertFalse(is_contract_exist('some contract address', "1"))
 
     def test_get_balance(self):
-        balance = get_balance("0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97", "0xdAC17F958D2ee523a2206206994597C13D831ec7", "3")
+        balance = get_balance("0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97", "0xdAC17F958D2ee523a2206206994597C13D831ec7", "1")
         self.assertIs(type(balance), float)
 
-        balance = get_balance("some wallet", "0xdAC17F958D2ee523a2206206994597C13D831ec7", "3")
+        balance = get_balance("some wallet", "0xdAC17F958D2ee523a2206206994597C13D831ec7", "1")
         self.assertIsNone(balance)
 
-        balance = get_balance("0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97", "some incorect address", "3")
+        balance = get_balance("0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97", "some incorect address", "1")
         self.assertIsNone(balance)
 
     
@@ -40,8 +36,8 @@ class WalletTestCase(TestCase):
         self.assertIsNone(price)
 
     def test_get_token_symbol(self):
-        price = get_token_symbol("0xdAC17F958D2ee523a2206206994597C13D831ec7", 3)
+        price = get_token_symbol("0xdAC17F958D2ee523a2206206994597C13D831ec7", 1)
         self.assertIs(type(price), str)
 
-        price = get_token_symbol("Invalid", 3)
+        price = get_token_symbol("Invalid", 1)
         self.assertIsNone(price)

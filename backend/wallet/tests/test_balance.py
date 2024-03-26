@@ -18,7 +18,7 @@ class BalanceTestCase(TestCase):
             network_id=Network.objects.get(id=1),
             wallet_id=Wallet.objects.get(id=1)
         )
-    
+
     def test_incorrect_data(self):
         post_form = {  
             'asset_address':'0x990f341946A3fdB507aE7e52d17851B87168017c', 
@@ -29,9 +29,21 @@ class BalanceTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
         balance = self.client.get("/api/balance/1/")
-        self.assertEqual(balance.data['asset_address'], "0x990f341946A3fdB507aE7e52d17851B87168017c")
+        self.assertEqual(balance.data['asset_address'], "0x990f341946A3fdB507aE7e52d17851B87168017c")     
+    
+    def test_create_balance(self):
+        new_data = {
+            'asset_address':'0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', 
+            'wallet_id': 1,
+            'network_id': 1
+        }
 
-    def test_delete_wallet(self):
+        response = self.client.post("/api/balance/", new_data)
+        self.assertEqual(response.status_code, 201)
+
+        balance = self.client.get("/api/balance/2/")
+        self.assertEqual(balance.data['asset_address'], "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599")     
+
+    def test_delete_balance(self):
         response = self.client.delete("/api/balance/1/")
         self.assertEqual(response.status_code, 204) 
-
