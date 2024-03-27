@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColsFilter renders correctly 1`] = `
+<div>
+  <div
+    class="column-filter"
+    id="ag-cols"
+  >
+    <div
+      style="overflow: hidden; height: 150px;"
+    >
+      <input
+        class="title"
+        id="searcherCols"
+        placeholder="Search for cols..."
+        type="text"
+        value=""
+      />
+      <div
+        class="column-filter-wrapper"
+        id="searchCols"
+        style="height: calc(100% - 28px);"
+      >
+        <div
+          class="column-filter-item"
+        >
+          <input
+            checked=""
+            class="input-cols-filter"
+            data-testid="AllCols"
+            id="AllCols"
+            type="checkbox"
+            value="true"
+          />
+          <label
+            class="input-column-name"
+            for="AllCols"
+          >
+            (All)
+          </label>
+        </div>
+        <div
+          class="column-filter-item"
+        >
+          <input
+            checked=""
+            class="input-cols-filter"
+            id="Column 1"
+            type="checkbox"
+            value="Column 1"
+          />
+          <label
+            class="input-column-name"
+            for="Column 1"
+          >
+            COLUMN 1
+          </label>
+        </div>
+        <div
+          class="column-filter-item"
+        >
+          <input
+            checked=""
+            class="input-cols-filter"
+            id="Column 2"
+            type="checkbox"
+            value="Column 2"
+          />
+          <label
+            class="input-column-name"
+            for="Column 2"
+          >
+            COLUMN 2
+          </label>
+        </div>
+      </div>
+    </div>
+    <div
+      class="apply-button-wrapper"
+    >
+      <button
+        class="apply-button"
+      >
+        Reset
+      </button>
+      <button
+        class="apply-button"
+        style="margin-left: 5px;"
+      >
+        Apply
+      </button>
+    </div>
+  </div>
+</div>
+`;

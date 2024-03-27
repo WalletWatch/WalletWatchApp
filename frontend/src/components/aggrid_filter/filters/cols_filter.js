@@ -158,6 +158,7 @@ const ColsFilter = (props) => {
                     <div className='column-filter-item'>
                         <input 
                             id='AllCols' 
+                            data-testid="AllCols"
                             className='input-cols-filter' 
                             type='checkbox' 
 

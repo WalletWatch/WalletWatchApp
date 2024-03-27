@@ -1,4 +1,5 @@
 import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import { shallow, configure } from 'enzyme';
 import ColsFilter from '../../components/aggrid_filter/filters/cols_filter';
 
@@ -8,7 +9,6 @@ configure({ adapter: new Adapter() });
 
 describe('ColsFilter', () => {
     let mockApi;
-    let wrapper;
 
     beforeEach(() => {
         mockApi = {
@@ -25,17 +25,24 @@ describe('ColsFilter', () => {
             addEventListener: jest.fn(),
             removeEventListener: jest.fn()
         };
-
-        wrapper = shallow(<ColsFilter api={mockApi} />);
     });
 
     it('renders correctly', () => {
-        expect(wrapper).toMatchSnapshot();
+        const { container } = render(
+            <ColsFilter api={mockApi} />
+        );
+
+        expect(container).toMatchSnapshot();
     });
 
     it('handles checkbox click correctly', () => {
+        let wrapper = shallow(<ColsFilter api={mockApi} />);
+        
         expect(wrapper.find('#AllCols').prop('checked')).toBe(true);
         wrapper.find('#AllCols').simulate('change', { target: { checked: false } });
         expect(wrapper.find('#AllCols').prop('checked')).toBe(false);
     });
 });
+
+
+
