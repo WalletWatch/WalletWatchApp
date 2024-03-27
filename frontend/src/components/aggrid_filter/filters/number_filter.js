@@ -199,6 +199,8 @@ const NumberFilter = (props) => {
                     <input 
                         className='input-numeric-slider'
                         id={`range1-${node}`}
+                        data-testid="range-1"
+
                         value={inputMin}
                         onChange={event => setInputMin(event.target.value)}
                         onKeyPress={event => inputNumeric(event, "one")}
@@ -209,6 +211,8 @@ const NumberFilter = (props) => {
                         className='input-numeric-slider'
                         style={{textAlign: "end"}}
                         id={`range2-${node}`}
+                        data-testid="range-2"
+
                         value={inputMax}
                         onChange={event => setInputMax(event.target.value)}
                         onKeyPress={event => inputNumeric(event, "two")}
@@ -224,6 +228,7 @@ const NumberFilter = (props) => {
                     ></div>
                     <input 
                         id={`slider-1-${node}`}
+                        data-testid="slider-1"
                         className='input-slider1'
                         type='range' 
 
@@ -237,6 +242,7 @@ const NumberFilter = (props) => {
                     />
                     <input 
                         id={`slider-2-${node}`}
+                        data-testid="slider-2"
                         className='input-slider2'
                         type='range' 
 

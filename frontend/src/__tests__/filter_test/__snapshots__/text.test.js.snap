@@ -1,24 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ColsFilter renders correctly 1`] = `
+exports[`TextFilter renders correctly 1`] = `
 <div>
   <div
     class="column-filter"
-    id="ag-cols"
   >
     <div
       style="overflow: hidden; height: 150px;"
     >
       <input
         class="title"
-        id="searcherCols"
-        placeholder="Search for cols..."
+        id="searcherundefined"
+        placeholder="Search for undefined..."
         type="text"
         value=""
       />
       <div
         class="column-filter-wrapper"
-        id="searchCols"
+        id="searchundefined"
         style="height: calc(100% - 28px);"
       >
         <div
@@ -27,14 +26,14 @@ exports[`ColsFilter renders correctly 1`] = `
           <input
             checked=""
             class="input-cols-filter"
-            data-testid="AllCols"
-            id="AllCols"
+            data-testid="AllParams"
+            id="AllParamsundefined"
             type="checkbox"
             value="true"
           />
           <label
             class="input-column-name"
-            for="AllCols"
+            for="AllParamsundefined"
           >
             (All)
           </label>
@@ -45,33 +44,12 @@ exports[`ColsFilter renders correctly 1`] = `
           <input
             checked=""
             class="input-cols-filter"
-            id="Column 1"
             type="checkbox"
-            value="Column 1"
+            value=""
           />
           <label
             class="input-column-name"
-            for="Column 1"
-          >
-            COLUMN 1
-          </label>
-        </div>
-        <div
-          class="column-filter-item"
-        >
-          <input
-            checked=""
-            class="input-cols-filter"
-            id="Column 2"
-            type="checkbox"
-            value="Column 2"
           />
-          <label
-            class="input-column-name"
-            for="Column 2"
-          >
-            COLUMN 2
-          </label>
         </div>
       </div>
     </div>
@@ -80,13 +58,13 @@ exports[`ColsFilter renders correctly 1`] = `
     >
       <button
         class="apply-button"
-        data-testid="reset"
+        data-testid="Reset"
       >
         Reset
       </button>
       <button
         class="apply-button"
-        data-testid="apply"
+        data-testid="Apply"
         style="margin-left: 5px;"
       >
         Apply

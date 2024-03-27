@@ -195,6 +195,7 @@ const ColsFilter = (props) => {
             <div className='apply-button-wrapper'>
                 <button
                     className='apply-button' 
+                    data-testid="reset"
 
                     onClick={clickResetRow}
                 >   
@@ -202,6 +203,7 @@ const ColsFilter = (props) => {
                 </button>
                 <button 
                     className='apply-button' 
+                    data-testid="apply"
                     style={{marginLeft: "5px"}}
 
                     onClick={clickHandleFilter}
