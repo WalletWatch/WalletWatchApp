@@ -203,7 +203,7 @@ const NumberFilter = (props) => {
 
                         value={inputMin}
                         onChange={event => setInputMin(event.target.value)}
-                        onKeyPress={event => inputNumeric(event, "one")}
+                        onKeyDown={event => inputNumeric(event, "one")}
                         type ='text'
                     >
                     </input>
@@ -215,7 +215,7 @@ const NumberFilter = (props) => {
 
                         value={inputMax}
                         onChange={event => setInputMax(event.target.value)}
-                        onKeyPress={event => inputNumeric(event, "two")}
+                        onKeyDown={event => inputNumeric(event, "two")}
                         type ='text'
                     >
                     </input>
@@ -223,6 +223,7 @@ const NumberFilter = (props) => {
                 <div className={`container container-${node}`}>
                     <div 
                         className={`slider-track slider-track-${node}`}
+                        data-testid="slider-track"
                         style={{background: "#666666"}}
                         onMouseDown={event => clickTrack(event)}
                     ></div>

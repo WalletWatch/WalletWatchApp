@@ -69,13 +69,13 @@ describe('NumberFilter', () => {
       
         expect(slider1).toHaveValue("50");
         expect(slider2).toHaveValue("70");
-      });
+    });
       
     test('input validation works as expected', () => {
         render(<NumberFilter api={mockApi} />);
         const input1 = screen.getByTestId('range-1');
         const slider1 = screen.getByTestId('slider-1');
-        const input2 = screen.getByTestId('range-1');
+        const input2 = screen.getByTestId('range-2');
         const slider2 = screen.getByTestId('slider-2');
 
         fireEvent.change(input1, { target: { value: 'abc' }});
@@ -85,7 +85,7 @@ describe('NumberFilter', () => {
 
         fireEvent.change(input2, { target: { value: 'abc' }});
         fireEvent.keyPress(input2, { key: 'Enter', code: 'Enter' });
-      
+
         expect(slider2).toHaveValue('201');
     });
 
@@ -117,8 +117,28 @@ describe('NumberFilter', () => {
         );
 
         await waitFor(() => expect(mockApi.onFilterChanged).toHaveBeenCalled());
-      });      
+    });      
       
+    test('click track function', async () => {
+        render(<NumberFilter api={mockApi} />);
+  
+        const slider1 = screen.getByTestId('slider-1');
+        const slider2 = screen.getByTestId('slider-2');
+        const track = screen.getByTestId('slider-track');
+
+        fireEvent.change(slider1, { target: { value: 20 }});
+        fireEvent.change(slider2, { target: { value: 50 }});
+
+        const clientX = 100;
+        const clientY = 50;
+
+        fireEvent.mouseDown(track, { clientX, clientY });
+        fireEvent.mouseMove(track, { clientX: clientX + 50, clientY });
+        fireEvent.mouseUp(track, { clientX: clientX + 50, clientY });
+        
+        expect(parseFloat(slider1.value)).toBeGreaterThan(20);
+        expect(parseFloat(slider2.value)).toBeGreaterThan(50);
+    });
 });
 
 
