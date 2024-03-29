@@ -17,6 +17,14 @@ type Wallet = {
     wallet_address: string;
 }
 
+type Alert = {
+  asset: string,
+  wallet: string,
+  balance: number,
+  price: number,
+  updated: string
+}
+
 function addWallet(wallet: Wallet) {
     return {
       type: 'ADD_WALLET',
@@ -66,4 +74,18 @@ function removeToken(id: number) {
     };
 }
 
-export { addWallet, addToken, removeToken, removeWallet, updateAllToken, updateToken, updateWallet };
+function addAlert(alert: Alert) {
+  return {
+    type: 'ADD_ALERT',
+    payload: alert
+  }
+}
+
+function updateAlert(alerts: Alert[]) {
+  return {
+    type: 'UPDATE_ALL_ALERT',
+    payload: alerts
+  }
+}
+
+export { addWallet, addToken, removeToken, removeWallet, updateAllToken, updateToken, updateWallet, addAlert, updateAlert };

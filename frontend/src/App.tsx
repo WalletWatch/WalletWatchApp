@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { fetchBalance } from './http/balance_api.ts';
 import { updateAllToken, updateWallet } from './store/actions.ts';
 import { fetchWallet } from './http/wallet_api.ts';
+import AlertList from './components/alert_list/alert.tsx';
 
 function App() {
     const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function App() {
                 </div>
             </div>
             <TokenTable/>
+            <AlertList/>
             <div className='footer'>v1.0.0</div>
         </div>
     );

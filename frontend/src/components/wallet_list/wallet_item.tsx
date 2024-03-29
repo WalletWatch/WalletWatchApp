@@ -25,7 +25,7 @@ function WalletItem({indx, wallet}: WalletItemProps) {
 
     return (
         <div 
-            className="wallet_item"
+            className="wallet_item_wrapper"
             data-testid="wallet_item"
         >
             <div className="wallet_item">

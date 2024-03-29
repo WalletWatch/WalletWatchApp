@@ -12,6 +12,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "realtime_task_schedule": {
         "task": "realtime_task",
-        "schedule": crontab(minute='*/15'),
+        "schedule": crontab(minute='*/2'),
     }
 }

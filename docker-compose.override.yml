@@ -4,32 +4,34 @@ services:
   psql:
     container_name: dev_psql
     environment:
-      - POSTGRES_DB=wallet_test
+      - POSTGRES_DB=wallet_dev
       - POSTGRES_USER=liza
       - POSTGRES_PASSWORD=2608
   redis:
     container_name: dev_redis
   django:
+    container_name: dev_django
     environment:
       - REDIS_HOST=dev_redis
-      - PSQL_NAME=wallet_test
+      - PSQL_NAME=wallet_dev
       - PSQL_USER=liza
       - PSQL_PASSWORD=2608
       - PSQL_HOST=dev_psql
       - PSQL_PORT=5432
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django-dev.rule=Host(`dev.gryumova.ru`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.django-dev.priority=100"
-      - "traefik.http.services.django-dev.loadbalancer.server.port=8000"
+      - "traefik.http.routers.django-prod.rule=Host(`dev.gryumova.ru`) && (PathPrefix(`/api`) || PathPrefix(`/ws`))"
+      - "traefik.http.routers.django-prod.priority=100"
+      - "traefik.http.services.django-prod.loadbalancer.server.port=8000"
       - "traefik.docker.network=web"
   celery: 
     environment:
       - REDIS_HOST=dev_redis
-      - POSTGRES_HOST=dev_psql
-      - POSTGRES_USER=liza
-      - POSTGRES_PASSWORD=2608
-      - POSTGRES_DB=wallet_test
+      - PSQL_NAME=wallet
+      - PSQL_USER=liza
+      - PSQL_PASSWORD=2608
+      - PSQL_HOST=dev_psql
+      - PSQL_PORT=5432
     depends_on:
       - psql
       - django
@@ -38,8 +40,8 @@ services:
       - REACT_APP_API_URL=https://dev.gryumova.ru
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react-dev.rule=Host(`dev.gryumova.ru`)"
-      - "traefik.http.routers.react-dev.priority=50"
-      - "traefik.http.services.react-dev.loadbalancer.server.port=3000"
+      - "traefik.http.routers.react-prod.rule=Host(`dev.gryumova.ru`)"
+      - "traefik.http.routers.react-prod.priority=50"
+      - "traefik.http.services.react-prod.loadbalancer.server.port=3000"
+      - "traefik.http.services.react-prod.loadBalancer.sticky=true" 
       - "traefik.docker.network=web"
-

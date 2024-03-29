@@ -1,7 +1,7 @@
 import axios from "axios"
 
-let host = 'https://gryumova.ru'
-// let host = '127.0.0.1:8000'
+// let host = 'https://gryumova.ru'
+let host = 'http://localhost:8000'
 // let host = process.env.REACT_APP_API_URL;
 
 export const fetchBalance = async () => {

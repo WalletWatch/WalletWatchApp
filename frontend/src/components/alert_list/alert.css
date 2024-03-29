@@ -1,0 +1,97 @@
+.alerts_list_wrapper {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    width: 500px;
+
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+
+    padding: 3px 10px;
+
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+
+    background: #f7f7f7;
+    -webkit-box-shadow: 0px 7px 27px 6px rgba(221, 228, 234, 0.21); 
+    -moz-box-shadow: 0px 7px 27px 6px rgba(221, 228, 234, 0.21); 
+    box-shadow: 0px 7px 27px 6px rgba(221, 228, 234, 0.21);
+}
+
+.alerts_list_wrapper_second {
+    display: flex;
+    flex-direction: column;
+
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+.alerts_list_wrapper:hover {
+    background-color: #ffffff;
+}
+
+.alerts_header {
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+
+    cursor: pointer;
+}
+
+.alerts_header_text {
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
+                Ubuntu, Cantarell, "Helvetica Neue",  sans-serif, "Apple Color Emoji",
+                "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 14px;
+}
+
+.alert_column_header {
+    display: flex;
+    flex-direction: row;
+    padding: 2px 10px;
+}
+
+.alert_column_header_item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+
+    width: 100%;
+
+
+    cursor: default;
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
+                Ubuntu, Cantarell, "Helvetica Neue",  sans-serif, "Apple Color Emoji",
+                "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 14px;
+}
+
+.alert_column_header_update {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
+                Ubuntu, Cantarell, "Helvetica Neue",  sans-serif, "Apple Color Emoji",
+                "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+                font-size: 14px;
+
+    margin-left: 50px;
+}
+
+.alerts_list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    width: 500px;
+    height: 200px;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

@@ -90,18 +90,18 @@ app.conf.beat_schedule = {
 
 ## Deploy the app
 
-1. **Configuration:**<br/>
-  Copy `.env.sample` to `.env.dev` and `.env.prod`. Configure settings as per your environment.
-2. **Docker Setup:**<br/>
+1. **Docker Setup:**<br/>
   Install Docker and Docker Compose on your server.
+2. **Configuration:**<br/>
+  Configure settings as per your environment.
 3. **Domain Setup:**<br/>
   Configure your domain and A records to point to your server's IP address and open port 443 for external connection.
 4. **Launch Docker Containers:**<br/>
   Launch the docker containers using the following commands:
 
 ```bash
-docker-compose --env-file .env.prod -f docker-compose.prod.yml down
-docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
+docker-compose -p prod -f docker-compose.prod.yml down
+docker-compose -p prod -f docker-compose.prod.yml up -d
 ```
 
 

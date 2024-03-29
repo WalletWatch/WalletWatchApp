@@ -76,7 +76,7 @@ function WalletForm() {
         newWalet.append('wallet_address', wallet.address);
 
         createWallet(newWalet)
-        .then(data => dispatch(addWallet(data)))
+        .then(data => { dispatch(addWallet(data)) })
         .then(() => {
                 setShow(false);
                 setWallet({name:"", address:""});
@@ -88,6 +88,7 @@ function WalletForm() {
             } else {
                 console.log("An error occurred:", err.message);
             }
+            setSubmitting(false);
         });
     }
 

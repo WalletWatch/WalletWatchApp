@@ -30,3 +30,33 @@ class WalletConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'balance': message,
         }))
+
+class AlertConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        print("Connected to alert")
+        self.channel_group_name = 'alert-realtime-data'
+
+        await self.channel_layer.group_add(
+            self.channel_group_name,
+            self.channel_name
+        )
+
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        print("Disconnected from alert")
+        await self.channel_layer.group_discard(
+            self.channel_group_name,
+            self.channel_name
+        )
+    
+    async def receive(self, text_data):
+        print(text_data)
+        pass
+
+    async def notification_message(self, event):
+        message = event['notification']
+
+        await self.send(text_data=json.dumps({
+            'notification': message,
+        }))

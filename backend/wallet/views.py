@@ -19,12 +19,12 @@ def balance_list(request):
 
         try:
             if (not is_contract_exist(asset_address, network_id)):
-                return Response("Sush asset address doesn't exist", status=status.HTTP_404_NOT_FOUND, headers={'Access-Control-Allow-Origin':'*'})
+                return Response("Such asset address doesn't exist", status=status.HTTP_404_NOT_FOUND, headers={'Access-Control-Allow-Origin':'*'})
         except: 
             return Response(status=status.HTTP_404_NOT_FOUND, headers={'Access-Control-Allow-Origin':'*'})
 
         if Balance.objects.filter(asset_address=asset_address, wallet_id=wallet_id).count() != 0:
-            return Response("Sush asset address exist", status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
+            return Response("Such asset address already exist in table", status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
         
         try:
             wallet = Wallet.objects.get(pk=wallet_id)
@@ -67,16 +67,22 @@ def wallet_list(request):
 
         return Response({'data': serializer.data })
     elif request.method == 'POST':
+        wallet_name = request.data['wallet_name']
+        wallet_address = request.data['wallet_address']
+
+        if not is_wallet_connected(wallet_address):
+            return Response("Wallet doesn't exist!", status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
+        
+        if Wallet.objects.filter(wallet_address=wallet_address).count() != 0 or Wallet.objects.filter(wallet_name=wallet_name).count() != 0:
+            return Response("Such wallet already inputed! Try other name or address.", status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
+        
         serializer = WalletSerializer(data=request.data)
 
         if serializer.is_valid():
-            if is_wallet_connected(request.data['wallet_address']):
-                serializer.save()
-            else: 
-                return Response("Wallet doesn't exist", status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
-            
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers={'Access-Control-Allow-Origin':'*'})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin':'*'})
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def wallet_detail(request, pk):

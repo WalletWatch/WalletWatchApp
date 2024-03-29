@@ -12,7 +12,7 @@ import CustomToolPanel from '../aggrid_filter/filters.js';
 import { ValueRenderer, BalanceFormatter, PriceFormatter} from './value_renderer.tsx';
 import { deleteBalance } from '../../http/balance_api.ts';
 import { removeToken } from '../../store/actions.ts';
-import { updateToken } from '../../store/actions.ts';
+import { updateToken, addAlert } from '../../store/actions.ts';
 import { RootState } from '../../store/store.ts';
 import LastUpdate from './menu_item.jsx';
 
@@ -90,13 +90,23 @@ function TokenTable() {
     }, []);
 
     useEffect(() => {
-        
-        const chatSocket =  new WebSocket(`wss://gryumova.ru/ws/wallet/`);
-
+        const chatSocket =  new WebSocket(`ws://localhost:8000/ws/wallet/`);
+    
         chatSocket.onmessage = function(e:any) {
             const data = JSON.parse(e.data);
+    
+            if (data.balance) dispatch(updateToken(data.balance));
+        }
+    }, [])
 
-            dispatch(updateToken(data.balance));
+    useEffect(() => {
+        const chatSocket =  new WebSocket(`ws://localhost:8000/ws/alert/`);
+    
+        chatSocket.onmessage = function(e:any) {
+            const data = JSON.parse(e.data);
+            
+            console.log(data)
+            if (data.notification) dispatch(addAlert(data.notification));
         }
     }, [])
 

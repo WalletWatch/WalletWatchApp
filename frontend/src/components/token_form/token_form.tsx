@@ -8,7 +8,6 @@ import Select from "react-select";
 import { addToken } from "../../store/actions.ts";
 import { RootState } from "../../store/store.ts";
 import { fetchNetwork } from "../../http/network.ts";
-import { IsAny } from "@reduxjs/toolkit/dist/tsHelpers";
 
 type TokenFormType = {
     address: string,
