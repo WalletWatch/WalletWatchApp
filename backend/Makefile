@@ -10,7 +10,7 @@ migration:
 
 .PHONY: run-server
 run-django:
-	redis cli && \
+	redis-server && \
 	python3 manage.py runserver && \
 	celery -A project worker --loglevel=info --beat 
 
