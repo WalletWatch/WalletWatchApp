@@ -14,37 +14,6 @@ type Alert = {
 
 function AlertList() {
     const alerts:Alert[] = useSelector((state: RootState) => state.alert)
-    // const alerts:Alert[] = [
-    //     {
-    //         "wallet": "wallet1",
-    //         "asset": "ETH",
-    //         "balance": -0.34,
-    //         "price": 0.45,
-    //         "updated": "2024-03-28T15:15:04.641139Z"
-    //     },
-    //     {
-    //         "wallet": "wallet2",
-    //         "asset": "ETH",
-    //         "balance": -0.34,
-    //         "price": 0.45,
-    //         "updated": "2024-03-28T15:15:04.641139Z"
-    //     },
-    //     {
-    //         "wallet": "wallet1",
-    //         "asset": "HOT",
-    //         "balance": -0.34,
-    //         "price": 0.45,
-    //         "updated": "2024-03-28T15:15:04.641139Z"
-    //     },
-    //     {
-    //         "wallet": "test",
-    //         "asset": "CSIX",
-    //         "balance": -0.34,
-    //         "price": 0.45,
-    //         "updated": "2024-03-28T15:15:04.641139Z"
-    //     },
-    // ]
-
     const [show, setShow] = useState(false);
     
     const handleClick = (e) => {

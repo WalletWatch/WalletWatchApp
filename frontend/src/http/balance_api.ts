@@ -20,12 +20,12 @@ export const createBalance = async (wallet) => {
     return data
 }
 
-export const fetchOneBalance = async (id) => {
+export const fetchOneBalance = async (id:number) => {
     const {data} = await axios.get(`${host}/api/balance/` + id + "/");
     return data;
 }
 
-export const deleteBalance = async (id) => {
+export const deleteBalance = async (id:number) => {
     const {data} = await axios.delete(`${host}/api/balance/` + id + `/`);
     return data;
 }
