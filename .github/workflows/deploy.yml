@@ -5,8 +5,8 @@ on:
     branches:
       # - main
       # - develop
-      # - traefik
-      - v2
+      - traefik
+      # - v2
 
 jobs:
   prepare-environment:
